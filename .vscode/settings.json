@@ -1,0 +1,20 @@
+{
+    "files.exclude": {
+        "**/main.aux": true,
+        "**/main.bbl": true,
+        "**/main.bcf": true,
+        "**/main.blg": true,
+        "**/main.fdb_latexmk": true,
+        "**/main.fls": true,
+        "**/main.log": true,
+        "**/main.out": true,
+        "**/main.run.xml": true,
+        "**/main.synctex.gz": true,
+
+        "**/.*": true,
+        "**/*.egg-info": true
+    },
+    "cSpell.words": [
+        "unbolded"
+    ]
+}
