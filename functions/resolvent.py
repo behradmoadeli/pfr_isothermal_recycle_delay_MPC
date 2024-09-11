@@ -18,9 +18,69 @@ def expm_P(P, z=1, e=0):
     
     return lina.expm(P * (z - e))
 
-def Integral_Rs(x, s, par):
+def Integral_Rs(x, s, par, adjoint=False):
     """
     Compute the I array for given state x, Laplace variable s, and parameters.
+    
+    Parameters:
+    ----------
+    x : np.ndarray
+        State array x(z) (2D with shape (2, N_zeta)).
+    s : float
+        Laplace variable.
+    par : dict
+        Dictionary containing parameters 'k', 'v', 'D', 'tau', and 'R'.
+    adjoint : bool, optional
+        If True, compute I for adjoint operator (default is False).
+    
+    Returns:
+    -------
+    I : np.ndarray
+        Computed I array.
+    T : np.ndarray
+        Precomputed matrix exponential array T.
+    """
+    import numpy as np
+    
+    N_zeta = len(x[0])
+    zeta = np.linspace(0,1,N_zeta)
+    
+    (k, v, D, tau, R) = (par['k'], par['v'], par['D'], par['tau'], par['R'])
+    if adjoint:
+        P = np.array([
+            [0, 1, 0],
+            [(s-k)/D, -v/D, 0],
+            [0, 0, -tau * s]
+        ])
+    else:
+        P = np.array([
+            [0, 1, 0],
+            [(s-k)/D, v/D, 0],
+            [0, 0, tau * s]
+        ])
+        
+    F = np.array([[expm_P(P, z, e) for e in zeta] for z in zeta])
+    T = F[:,0]
+    
+    I = np.zeros((2, 3, 3, N_zeta))
+    # Fully obtaining I, time consuming
+    # for i,j in range(3):
+        # for n_z, z in enumerate(zeta):
+            # I[0][i,j] = np.trapz(F[n_z,:n_z+1,i,j] * np.array(x[0,:n_z+1]), zeta[:n_z+1])
+            # I[1][i,j] = np.trapz(F[n_z,:n_z+1,i,j] * np.array(x[1,:n_z+1]), zeta[:n_z+1])
+    # Compute only the necessary elements of I
+    for n_z in range(N_zeta):
+        I[0,0,1,n_z] = np.trapz(F[n_z,:n_z+1,0,1] * np.array(x[0,:n_z+1]), zeta[:n_z+1])
+        I[1,2,2,n_z] = np.trapz(F[n_z,:n_z+1,2,2] * np.array(x[1,:n_z+1]), zeta[:n_z+1])
+    I[0,0,1,-1] = np.trapz(F[-1,:,0,1] * np.array(x[0,:]), zeta)
+    I[1,2,2,-1] = np.trapz(F[-1,:,2,2] * np.array(x[1,:]), zeta)
+    I[0,1,1,-1] = np.trapz(F[-1,:,1,1] * np.array(x[0,:]), zeta)
+    
+    return I, T
+
+def Rs(x, s, par):
+    """
+    Resolvent operator for the state x, Laplace variable s, and parameters.
     
     Parameters:
     ----------
@@ -33,72 +93,13 @@ def Integral_Rs(x, s, par):
     
     Returns:
     -------
-    I : np.ndarray
-        Computed I array.
-    F : np.ndarray
-        Precomputed matrix exponential array F.
-    T : np.ndarray
-        Precomputed matrix exponential array T.
-    """
-    import numpy as np
-    
-    N_zeta = len(x[0])
-    zeta = np.linspace(0,1,N_zeta)
-    
-    x1 = np.array(x[0,:])
-    x2 = np.array(x[1,:])
-    
-    (k, v, D, tau, R) = (par['k'], par['v'], par['D'], par['tau'], par['R'])
-    P = np.array([
-        [0, 1, 0],
-        [(s-k)/D, v/D, 0],
-        [0, 0, tau * s]
-    ])
-    F = np.array([[expm_P(P, z, e) for e in zeta] for z in zeta])
-    T = F[:,0]
-    
-    I = np.zeros((2, 3, 3, N_zeta))
-    # Fully obtaining I, time consuming
-    # for i,j in range(3):
-        # for n_z, z in enumerate(zeta):
-            # I[0][i,j] = np.trapz(F[n_z,:n_z+1,i,j] * x1, zeta[:n_z+1])
-            # I[1][i,j] = np.trapz(F[n_z,:n_z+1,i,j] * x2, zeta[:n_z+1])
-    # Compute only the necessary elements of I
-    for n_z in range(N_zeta):
-        I[0,0,1,n_z] = np.trapz(F[n_z,:n_z+1,0,1] * x1, zeta[:n_z+1])
-        I[1,2,2,n_z] = np.trapz(F[n_z,:n_z+1,2,2] * x2, zeta[:n_z+1])
-    I[0,1,1,-1] = np.trapz(F[-1,:,1,1] * x1, zeta)
-    
-    return I, T
-
-def Rs(x, par, I, T):
-    """
-    Resolvent operator for the state x, Laplace variable s, parameters, and precomputed I and T arrays.
-    
-    Parameters:
-    ----------
-    x : np.ndarray
-        State array x(z) (2D with shape (2, N_zeta)).
-    par : dict
-        Dictionary containing parameters 'k', 'v', 'D', 'tau', and 'R'.
-    I : np.ndarray
-        Precomputed integral array I.
-    T : np.ndarray
-        Precomputed matrix exponential array T.
-    
-    Returns:
-    -------
     np.ndarray
         Computed resolvent X(s, z) for state x(z, t=0).
     """
     import scipy.linalg as lina
     import numpy as np
-        
-    x1 = np.array(x[0,:])
-    x2 = np.array(x[1,:])
-    X1 = np.zeros_like(x1)
-    X2 = np.zeros_like(x2)
     
+    I, T = Integral_Rs(x, s, par)
     (k, v, D, tau, R) = (par['k'], par['v'], par['D'], par['tau'], par['R'])
 
     a = np.array([
@@ -113,15 +114,15 @@ def Rs(x, par, I, T):
     ])
     M = lina.inv(a)
     X0 = M @ b
-    [X1[0], X1_prime_0, X2[0]] = X0
+    [X1_0, X1_prime_0, X2_0] = X0
     
-    X1 = X1[0] * T[:,0,0] + X1_prime_0 * T[:,0,1] - 1/D * I[0,0,1,:]
-    X2 = X2[0] * T[:,2,2] - tau * I[1,2,2,:]
+    X1 = X1_0 * T[:,0,0] + X1_prime_0 * T[:,0,1] - 1/D * I[0,0,1,:]
+    X2 = X2_0 * T[:,2,2] - tau * I[1,2,2,:]
     X = np.array([X1, X2])
         
     return X
 
-def A_d(x, s, par, I, T, pow=1):
+def A_d(x, s, par, pow=1):
     """
     Discrete-time A operator applied to state x.
 
@@ -133,29 +134,25 @@ def A_d(x, s, par, I, T, pow=1):
         Laplace variable.
     par : dict
         Dictionary of system parameters.
-    I : np.ndarray
-        Precomputed integral array I.
-    T : np.ndarray
-        Precomputed matrix exponential array T.
     pow : int, optional
         Number of iterations (default is 1).
     
     Returns:
     -------
     np.ndarray
-        Updated state after applying the A operator.
+        All of updated states after applying the A operator.
     """
-    for _ in range(pow):
-        x = -x + 2*s * Rs(x, par, I, T)
+    import numpy as np
+    
+    X = np.zeros((2, len(x[0]), pow+1))
+    X[:,:,0] = x
+    
+    for i in range(pow):
+        X[:,:,i+1] = -X[:,:,i] + 2*s * Rs(X[:,:,i], s, par)
 
-    return x
-#________________________________________________
-# Fix below this line
-# Fix Bd functions of zeta
-# Introduce I for adjoint
-# get rid of unnecessary I calculations for adjoint
-# Reflect changes to where functions are called (such as in Ad adjoint)
-#________________________________________________
+    return X
+
+
 def B_d(zeta, s, par, u=1):
     """
     Discrete-time B operator for boundary input.
@@ -174,7 +171,7 @@ def B_d(zeta, s, par, u=1):
     Returns:
     -------
     np.ndarray
-        Computed B operator for the control input.
+        B_d operator as function of zeta.
     """
     import scipy.linalg as lina
     import numpy as np
@@ -185,8 +182,7 @@ def B_d(zeta, s, par, u=1):
         [(s-k)/D, v/D, 0],
         [0, 0, tau * s]
     ])
-    T[-1] = expm_P(P)
-    X = np.array(x)
+    T = np.array([expm_P(P, z) for z in zeta])
 
     a = np.array([
         [-v, D, R*v],
@@ -194,26 +190,20 @@ def B_d(zeta, s, par, u=1):
         [T[-1,1,0], T[-1,1,1], 0]
     ])
     M = lina.inv(a)
+    b_tilde = np.array([1, -T[-1,0,1], -T[-1,1,1]])
+    X0_tilde = M @ b_tilde
+    [X1_0_tilde, X1_prime_0_tilde, X2_0_tilde] = X0_tilde
     
-    X1 = X[0,:]
-    X2 = X[1,:]
-    
-    b = np.array([0, T[-1,0,1], T[-1,1,1]]) * v * (1-R) / D * u
-    X0 = M @ b
-    [X1[0], X2[0], X1_prime_0] = X0
-    
-    for i, z in enumerate(zeta[1:], start=1):
-        Tz = expm_P(P, z=z)
-        X1[i] = Tz[0,0] * X1[0] + Tz[0,1] * X1_prime_0 - v * (1-R) / D * Tz[0,1] * u
-        X2[i] = Tz[2,2] * X2[0]
-        
+    X1 = v * (1-R) * (T[:,0,0] * X1_0_tilde + T[:,0,1] * (X1_prime_0_tilde + 1))
+    X2 = v * (1-R) * (T[:,2,2] * X2_0_tilde)
     X = np.array([X1, X2])
+    B_d = np.sqrt(2*s) * X
         
-    return np.sqrt(2*s) * X
+    return B_d * u
 
 def Rs_adjoint(x, s, par):
     """
-    Adjoint resolvent operator for the state x, Laplace variable s, and parameters.
+    Adjoint resolvent operator for the state x, Laplace variable s, parameters, and precomputed I and T arrays.
     
     Parameters:
     ----------
@@ -232,46 +222,25 @@ def Rs_adjoint(x, s, par):
     import scipy.linalg as lina
     import numpy as np
     
-    N_zeta = len(x[0])
-    zeta = np.linspace(0,1,N_zeta)
-    
-    x1 = np.array(x[0,:])
-    x2 = np.array(x[1,:])
-    X1 = np.zeros_like(x1)
-    X2 = np.zeros_like(x2)
-    
+    I, T = Integral_Rs(x, s, par, adjoint=True)
     (k, v, D, tau, R) = (par['k'], par['v'], par['D'], par['tau'], par['R'])
-    P = np.array([
-        [0, 1, 0],
-        [(s-k)/D, -v/D, 0],
-        [0, 0, -s * tau]
-    ])
-    F = np.array([[expm_P(P, z, e) for e in zeta] for z in zeta])
-    T = F[:,0]
-    
-    I = np.zeros(2,3,3,N_zeta)
-    for i,j in range(3):
-        for n_z, z in enumerate(zeta):
-            I[0][i,j] = np.trapz(F[n_z,:n_z+1,i,j] * x1, zeta[:n_z+1])
-            I[1][i,j] = np.trapz(F[n_z,:n_z+1,i,j] * x2, zeta[:n_z+1])
 
     a = np.array([
         [0, 1, 0],
         [R*v, 0, 1/tau],
-        [D*T[-1,1,0]+v*T[-1,0,0], D*T[-1,1,1]+v*T[-1,0,1], -1/tau*T[-1,2,2]]
+        [v*T[-1,0,0]+D*T[-1,1,0], v*T[-1,0,1]+D*T[-1,1,1], -T[-1,2,2]/tau]
     ])
     b = np.array([
         0,
         0,
-        v/D * I[0,0,1,-1] + I[0,1,1,-1] + I[1,2,2,-1]
+        I[0,0,1,-1]* v/D + I[0,1,1,-1] + I[1,2,2,-1]
     ])
     M = lina.inv(a)
     X0 = M @ b
-    [X1[0], X1_prime_0, X2[0]] = X0
+    [X1_0, X1_prime_0, X2_0] = X0
     
-    X1 = X1[0] * T[:,0,0] + X1_prime_0 * T[:,0,1] - 1/D * I[0,0,1,:]
-    X2 = X2[0] * T[:,2,2] + tau * I[1,2,2,:]
-        
+    X1 = X1_0 * T[:,0,0] + X1_prime_0 * T[:,0,1] - 1/D * I[0,0,1,:]
+    X2 = X2_0 * T[:,2,2] + tau * I[1,2,2,:]
     X = np.array([X1, X2])
         
     return X
@@ -294,12 +263,17 @@ def A_d_adjoint(x, s, par, pow=1):
     Returns:
     -------
     np.ndarray
-        Updated state after applying the A operator.
+        All of updated states after applying the A operator.
     """
+    import numpy as np
+    
+    X = np.zeros((2, len(x[0]), pow+1))
+    X[:,:,0] = x
+    
     for i in range(pow):
-        x = -x + 2*s * Rs_adjoint(x, s, par)
+        X[:,:,i+1] = -X[:,:,i] + 2*s * Rs_adjoint(X[:,:,i], s, par)
 
-    return x
+    return X
 
 def B_d_adjoint(x, s, par):
     """
@@ -321,12 +295,10 @@ def B_d_adjoint(x, s, par):
     """
     import numpy as np
     
-    N_zeta = len(x[0])
-    zeta = np.linspace(0,1,N_zeta)
+    zeta = np.linspace(0,1,len(x[0]))
     
     B = B_d(zeta, s, par)
-    [B1, B2] = B
-    I = B1 * x[0] + B2 * x[1]
+    I = B[0,:] * x[0,:] + B[1,:] * x[1,:]
     X = np.trapz(I, zeta)
     
     return X
