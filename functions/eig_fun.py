@@ -313,7 +313,7 @@ def eig_fun_mul_3(x, *args):
 
     return np.dot(z_1, phi_1.conjugate()) + np.dot(z_2, phi_2.conjugate())
 
-def q_ricatti_fun_mul(x, *args):
+def q_riccati_fun_mul(x, *args):
     
     import numpy as np
 

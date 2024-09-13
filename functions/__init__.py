@@ -16,9 +16,10 @@ from .create_label import create_label
 from .plot_single_df import plot_single_df
 from .eig_fun import *
 from .upper_triangular import *
-from .ricatti import *
+from .riccati import *
 from .lqr_cost import *
 from .resolvent import *
+from .MPC import *
 
 # from sys import version_info
 # # Check if Python version is 3.11 or higher

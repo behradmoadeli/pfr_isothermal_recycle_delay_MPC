@@ -302,3 +302,25 @@ def B_d_adjoint(x, s, par):
     X = np.trapz(I, zeta)
     
     return X
+
+def Q_bar(x, par, lambdas, normal_coefs, q_ctrl, imag_tol=1e-8):
+    
+    import numpy as np
+    from functions import q_riccati
+    from functions import eig_fun_1, eig_fun_2, eig_fun_adj_1, eig_fun_adj_2
+    
+    zeta = np.linspace(0, 1, len(x[0]))
+    Q_vector = np.zeros_like(x, dtype=complex)
+    n_lambdas = len(lambdas)
+
+    for i in range(n_lambdas):
+        for j in range(n_lambdas):
+            q_coef = -q_riccati(i,j, par, lambdas, normal_coefs, q_ctrl)/(lambdas[i]+lambdas[j].conjugate())
+            q_inner = np.trapz(x[0,:] *  eig_fun_adj_1(zeta, par, lambdas[j], normal_coefs[j]) + x[1,:] *  eig_fun_adj_2(zeta, par, lambdas[j], normal_coefs[j]))
+            q_vector = q_coef * q_inner * np.array([eig_fun_1(zeta, par, lambdas[i], normal_coefs[i]), eig_fun_2(zeta, par, lambdas[i], normal_coefs[i])]).reshape(x.shape)
+            Q_vector += q_vector
+            
+    if np.max(np.imag(Q_vector)) < imag_tol:
+        return np.real(Q_vector)
+    else:
+        raise ValueError(f"The imaginary part for Q_bar is not negligible (max imaginary part: {np.max(np.abs(Q_vector.imag))})")

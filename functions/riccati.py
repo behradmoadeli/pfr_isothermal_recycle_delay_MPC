@@ -1,10 +1,10 @@
-def ricatti(p_flat, *args):
+def riccati(p_flat, *args):
     """
-    Function that evaluates Ricatti equation given p[i,j] coefficients.
+    Function that evaluates riccati equation given p[i,j] coefficients.
 
     Parameters:
     - p_flat: Matrix representing the current state.
-    - *args: Additional arguments needed for the Ricatti equation solver.
+    - *args: Additional arguments needed for the riccati equation solver.
 
     Args (in *args):
     - args[0]: Dictionary of parameters including 'k', 'v', 'D', 'tau', and 'R'.
@@ -24,7 +24,7 @@ def ricatti(p_flat, *args):
     (k, v, D, t, R) = (par['k'], par['v'], par['D'], par['tau'], par['R'])
     lambdas = args[1]
     normal_coefs = args[2]
-    (q_coef, r_coef) = args[3]
+    (q_ctrl, r_ctrl) = args[3]
     
     slicer = int(len(p_flat)/2)
     p_flat_real = p_flat[:slicer]
@@ -42,9 +42,9 @@ def ricatti(p_flat, *args):
     for n in range(N):
         for m in range(n+1):
             y[m,n] = (
-                p[n,m] * (lambdas[n].conjugate() + lambdas[n]) - (1/r_coef) * (
+                p[n,m] * (lambdas[n].conjugate() + lambdas[n]) - (1/r_ctrl) * (
                     np.dot(np.dot(b, p[:,m]), np.dot(b, p[:,n]).conjugate())
-                ) + q_coef * q_ricatti(m,n, par, lambdas, normal_coefs)
+                ) + q_riccati(m,n, par, lambdas, normal_coefs, q_ctrl)
             )
     
     y_complex_flat = triu_to_flat(y)
@@ -52,21 +52,22 @@ def ricatti(p_flat, *args):
     y_flat_raw = [*y_real_flat, *y_imag_flat]
     return y_flat_raw
 
-def q_ricatti(n,m,*args):
+def q_riccati(n,m,*args):
 
     import numpy as np
     from scipy.integrate import quad
-    from .eig_fun import q_ricatti_fun_mul
+    from .eig_fun import q_riccati_fun_mul
 
     par = args[0]
     lambdas = args[1]
     normal_coefs = args[2]
+    q_ctrl = args[3]
 
-    q_nm = quad(q_ricatti_fun_mul, 0, 1, args=(par, (lambdas[n], lambdas[m]), (normal_coefs[n], normal_coefs[m])), complex_func=True)[0]
+    q_nm = q_ctrl * quad(q_riccati_fun_mul, 0, 1, args=(par, (lambdas[n], lambdas[m]), (normal_coefs[n], normal_coefs[m])), complex_func=True)[0]
     
     return q_nm
 
-def k_ricatti(x, p_flat, *args):
+def k_riccati(x, p_flat, *args):
     
     import numpy as np
     from .eig_fun import eig_fun_adj_1, eig_fun_adj_2
