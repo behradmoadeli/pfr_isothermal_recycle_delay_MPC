@@ -50,10 +50,14 @@ def MPC_matrix_build(
     
     u_min, u_max = u_limits
     y_min, y_max = y_limits
-    CT = np.vstack((-S, S, np.eye(N), -np.eye(N)))
+    N_ctrb = int(np.ceil(s/2/par['v']+1))
+    S_ctrb = S[N_ctrb:,:].copy()
+    T_ctrb = T[N_ctrb:].copy()
+    
+    CT = np.vstack((-S_ctrb, S_ctrb, np.eye(N), -np.eye(N)))
     b = np.vstack((
-            np.array(T-y_max).reshape(-1,1), 
-            np.array(y_min-T).reshape(-1,1), 
+            np.array(T_ctrb-y_max).reshape(-1,1), 
+            np.array(y_min-T_ctrb).reshape(-1,1), 
             u_min*np.ones((N,1)), 
             -u_max*np.ones((N,1))
         )).reshape(-1,)
