@@ -160,7 +160,7 @@ def init_cond_func_1(x, *args):
     import numpy as np
 
     # y = np.ones_like(x)
-    y = 1-np.cos(2*np.pi*x)
+    y = (1-np.cos(2*np.pi*x))/2
     # par = args[0]
     
     # y = 2 * eig_fun_1(x, par, 0.6409081359945565+0j, -0.47362647607303926j) + 7* eig_fun_1(x, par, -2.470670435901706+8.418531957532583j, 0.47930716047278943-0.0018801497185718524j)
@@ -175,7 +175,7 @@ def init_cond_func_2(x, *args):
     (k, v, D, t, R) = (par['k'], par['v'], par['D'], par['tau'], par['R'])
     
     # y = (1 + (R-1) * x) / R
-    y = np.zeros_like(x)
+    y = np.zeros_like(x)+0.1
     # y = 1/R + x * (np.cos(2*np.pi * x) - 1/R)
     # y = 2 * eig_fun_2(x, par, 0.6409081359945565+0j, -0.47362647607303926j) + 7* eig_fun_2(x, par, -2.470670435901706+8.418531957532583j, 0.47930716047278943-0.0018801497185718524j)
 

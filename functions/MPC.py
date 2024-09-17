@@ -2,7 +2,8 @@ def MPC_matrix_build(
         x, s, par, 
         lambdas, normal_coefs, q_ctrl, G, S, S_u,
         n_modes=7, N=10,
-        u_limits=(-100, 100), y_limits=(-1000, 1000)
+        u_limits=(-100, 100), y_limits=(-1000, 1000),
+        meq=1
     ):
     
     import numpy as np
@@ -43,10 +44,12 @@ def MPC_matrix_build(
             -u_max*np.ones((N,1))
         )).reshape(-1,)
     
+    if meq == 0:
+        CT = CT[1:,:]
+        b = b[1:]
     a = -P
     C = CT.T
     b = b.flatten()
-    meq = 1
     
     return G, a, C, b, meq
 
