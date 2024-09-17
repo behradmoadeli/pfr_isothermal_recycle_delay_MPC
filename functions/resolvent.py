@@ -118,6 +118,7 @@ def Rs(x, s, par):
     
     X1 = X1_0 * T[:,0,0] + X1_prime_0 * T[:,0,1] - 1/D * I[0,0,1,:]
     X2 = X2_0 * T[:,2,2] - tau * I[1,2,2,:]
+    # X2[-1] = X1[-1].copy()
     X = np.array([X1, X2])
         
     return X
