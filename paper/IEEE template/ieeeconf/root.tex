@@ -1,0 +1,72 @@
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out if you need a4paper
+
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
+
+\IEEEoverridecommandlockouts                              % This command is only needed if 
+                                                          % you want to use the \thanks command
+
+\overrideIEEEmargins                                      % Needed to meet printer requirements.
+
+
+
+
+% The following packages can be found on http:\\www.ctan.org
+\usepackage{graphics} % for pdf, bitmapped graphics files
+\usepackage{epsfig} % for postscript graphics files
+% \usepackage{times}
+% \usepackage{newtxtext,newtxmath} % Times-like text and math fonts
+
+\usepackage{mathptmx} % assumes new font selection scheme installed
+\usepackage{times} % assumes new font selection scheme installed
+\usepackage{amsmath} % assumes amsmath package installed
+\usepackage{amssymb}  % assumes amsmath package installed
+% \usepackage[utf8]{inputenc}
+
+\usepackage{cite} % Use cite.sty for numerical citation management
+\usepackage[bookmarks=true]{hyperref} % Use hyperref for other links
+
+% Override the fake natbib command to allow cite.sty and hyperref to work together
+\makeatletter
+\let\NAT@parse\undefined
+\makeatletter
+
+\title{\LARGE \bf
+Model Predictive Control of Axial Dispersion Tubular Reactors\\ with Recycle: Addressing State-delay through Transport PDEs*
+}
+
+
+\author{Behrad Moadeli and Stevan Dubljevic$^{1}$% <-this % stops a space
+\thanks{*This work was not supported by any organization}% <-this % stops a space
+\thanks{$^{1}$Behrad Moadeli and Stevan Dubljevic are with the Department of Chemical and Materials Engineering,
+         University of Alberta, Edmonton, AB, Canada T6G 1H9
+        {\tt\small moadeli@ualberta.ca}, {\tt\small stevan.dubljevic@ualberta.ca}}%
+}
+
+
+\begin{document}
+
+
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+
+        This paper presents the model predictive control of an axial tubular reactor with a recycle stream, where the intrinsic time delay imposed by the recycle stream—often overlooked in prior studies—is modeled as a transport PDE. This leads to a boundary-controlled system of coupled parabolic and hyperbolic PDEs under Danckwerts boundary conditions, ideal for this reactor type. A discrete-time linear model predictive controller is designed to stabilize the system. Utilizing Caley-Tustin time discretization along with the late lumping approach, the system's infinite-dimensional characteristics are preserved with no need for model reduction or spatial approximation. Numerical simulations demonstrate the controller’s effectiveness in stabilizing an unstable system while satisfying input constraints.
+
+\end{abstract}
+
+\input{sections/01_intro}
+
+
+% Include the bibliography
+\bibliographystyle{IEEEtran}
+\bibliography{./IEEEabrv,./references}  % Include both abbreviation and reference files
+
+
+
+
+\end{document}

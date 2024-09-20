@@ -1,0 +1,29 @@
+\begin{thebibliography}{1}
+\providecommand{\url}[1]{#1}
+\csname url@rmstyle\endcsname
+\providecommand{\newblock}{\relax}
+\providecommand{\bibinfo}[2]{#2}
+\providecommand\BIBentrySTDinterwordspacing{\spaceskip=0pt\relax}
+\providecommand\BIBentryALTinterwordstretchfactor{4}
+\providecommand\BIBentryALTinterwordspacing{\spaceskip=\fontdimen2\font plus
+\BIBentryALTinterwordstretchfactor\fontdimen3\font minus \fontdimen4\font\relax}
+\providecommand\BIBforeignlanguage[2]{{%
+\expandafter\ifx\csname l@#1\endcsname\relax
+\typeout{** WARNING: IEEEtran.bst: No hyphenation pattern has been}%
+\typeout{** loaded for the language `#1'. Using the pattern for}%
+\typeout{** the default language instead.}%
+\else
+\language=\csname l@#1\endcsname
+\fi
+#2}}
+
+\bibitem{ray1981advanced}
+W.~H. Ray, \emph{Advanced process control}.\hskip 1em plus 0.5em minus 0.4em\relax McGraw-Hill: New York, NY, USA, 1981.
+
+\bibitem{davison1976robust}
+E.~Davison, ``The robust control of a servomechanism problem for linear time-invariant multivariable systems,'' \emph{IEEE transactions on Automatic Control}, vol.~21, no.~1, pp. 25--34, 1976.
+
+\bibitem{moghadam2012infinite}
+A.~A. Moghadam, I.~Aksikas, S.~Dubljevic, and J.~F. Forbes, ``Infinite-dimensional lq optimal control of a dimethyl ether (dme) catalytic distillation column,'' \emph{Journal of Process Control}, vol.~22, no.~9, pp. 1655--1669, 2012.
+
+\end{thebibliography}
