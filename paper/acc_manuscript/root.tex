@@ -24,6 +24,22 @@
 
 \usepackage{cite} % Use cite.sty for numerical citation management
 \usepackage[bookmarks=true]{hyperref} % Use hyperref for other links
+% \usepackage{hyperref} % Use hyperref for other links
+
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{svg}
+\usepackage{bm}
+
+\tikzstyle{block} = [rectangle, minimum width=2cm, minimum height=1cm,text centered, draw=black]
+\tikzstyle{block_1} = [rectangle, minimum width=2cm, minimum height=1cm,text centered, draw=black, fill=blue!5]
+\tikzstyle{block_2} = [rectangle, minimum width=2cm, minimum height=1cm,text centered, draw=black, fill=red!5]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\tikzstyle{arrow_2} = [very thick,->,>=stealth]
+\tikzstyle{arrow_3} = [thick,->,>=stealth,dashed]
+\tikzstyle{pfr} = [cylinder, draw, minimum height=4cm, minimum width=1cm, shape aspect=1, shape border rotate=180]
+\usetikzlibrary{shapes.geometric}
+
 
 % Override the fake natbib command to allow cite.sty and hyperref to work together
 \makeatletter

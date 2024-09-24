@@ -1,10 +1,131 @@
 \section{Methodology}
 
-
-
 \subsection{Model representation}
 
+\begin{figure}[!htbp] 
+    \centering
+    \begin{tikzpicture}
+        \node (pfr) [cylinder, draw, minimum height=3cm, minimum width=1cm, shape aspect=1, shape border rotate=180, cylinder uses custom fill, cylinder end fill=gray!45, cylinder body fill=gray!15] {$\underline{A} \rightarrow \underline{B}$};
+        \node (pfr_inlet) [circle, left of=pfr, xshift=-0.5cm, fill=black, draw, inner sep=0pt, minimum size=0.25cm, scale=0.5] {};
+        \node (pfr_outlet) [circle, at={(pfr.east)}, shift={(-0.25cm,0)}, fill=black, draw, inner sep=0pt, minimum size=0.25cm, scale=0.5] {};
+        \node (recycle_right) [circle, right of=pfr_outlet, fill=black, draw, inner sep=0pt, minimum size=0.25cm, scale=0.5] {};
+        \node (recycle_left) [circle, left of=pfr_inlet, fill=black, draw, inner sep=0pt, minimum size=0.25cm, scale=0.5] {};
+        
+        \draw[dotted, thick] ([yshift=0.5cm]pfr_inlet.center) -- node[at end, below, yshift=0.1cm] {$\zeta = 0$} ([yshift=-0.65cm]pfr_inlet.center);
+        \draw[dotted, thick] ([yshift=0.5cm]pfr_outlet.center) -- node[at end, below, yshift=0.1cm] {$\zeta = 1$} ([yshift=-0.65cm]pfr_outlet.center);
+        
+        \node[below of=recycle_left, node distance=1.3cm, anchor=north west, xshift=-0.2cm] {$R \, c(1, t-\tau)$};
+        \node[above of=pfr_inlet, node distance=0.75cm,] {$c(0, t)$};
+        \node[above of=pfr_outlet, node distance=0.75cm,] {$c(1, t)$};
+        
+        \draw [arrow_2] (pfr_outlet) -- node[near end, above] {$y(t)$} ++(2,0);
+        \draw [arrow_2] (pfr_inlet) ++(-2,0) coordinate(start) -- node[near start, above] {$u(t)$} (pfr_inlet);
+        \draw [arrow_2] (recycle_right) -- ++(0,-1.25) -| (recycle_left);
+        
+    \end{tikzpicture}
+    \caption{Axial tubular reactor with recycle stream.}
+    \label{fig:reactor_scheme}
+    % \pdfbookmark[2]{Figure: Reactor Scheme}{fig:reactor_scheme}
+\end{figure}
 
+The chemical process illustrated in Figure~\ref{fig:reactor_scheme} represents an axial dispersion tubular reactor, which incorporates diffusion, convection, and a first-order irreversible chemical reaction \cite{levenspiel1998chemical}. The reactor is equipped with a recycle mechanism, allowing a fraction of the product stream to re-enter the reactor to ensure the consumption of any unreacted substrate. By applying first-principle modeling through relevant mass balance relations on an infinitesimally small section of the reactor, the reactor's dynamics can be described by a second-order parabolic PDE, a common class of equations used to characterize diffusion-convection-reaction systems \cite{jensen1982bifurcation}. The resulting PDE that describes the reactor model is given by:
+
+\begin{equation} \label{eq:PDE_original_model}
+    \dot{c}(\zeta, t) = D \partial_{\zeta \zeta} c(\zeta, t) - v \partial_\zeta c(\zeta, t) + k_r c(\zeta, t)
+\end{equation}
+
+subject to Dankwerts boundary conditions:
+
+\begin{align} \label{eq:BC}
+    \begin{cases}
+        &D \partial_\zeta c(0, t) - v c(0, t) = -v \left[ R c(1, t-\tau) + (1-R) u(t) \right] \\
+        &\partial_\zeta c(1, t) = 0 \\
+        &y(t) = c(1, t)
+    \end{cases}
+\end{align}
+
+Here, $c(\zeta, t)$ denotes the properly scaled notion of concentration along the reactor, representing the state of the system. The physical parameters $D$, $v$, $k_r$, $R$, and $\tau$ correspond to the diffusion coefficient, flow velocity along the reactor, reaction constant, recycle ratio, and residence time of the recycle stream, respectively. The spatial and temporal coordinates of the system are represented by $\zeta$ and $t$, where $\zeta \in [0, 1]$ and $t \in [0, \infty)$.
+
+Dankwerts boundary conditions are particularly suitable for modeling axial tubular reactors, as they account for deviations from perfect mixing and piston flow, assuming negligible transport lags in connecting lines \cite{danckwerts1993continuous}. These conditions make the model more realistic for chemical reactors of this type. The input and the output of the system are also present in the boundary conditions. The system output is measured at the reactor outlet, while the input is applied at the inlet. Additionally, the delayed state resulting from the recycled portion of the flow, occurring $\tau$ time units ago, is incorporated into the inlet; all as shown in Equation~(\ref{eq:BC}).
+
+One effective method for addressing delay in systems is to represent the delay using an alternative transport partial differential equation (PDE). This approach is particularly advantageous when the problem already involves similar forms of PDEs, as is the case in the current study. To specifically address the delay in the system under consideration, the state variable $c(\zeta, t)$ is expanded into a vector of functions $\underline{x}(\zeta, t) \equiv [x_1(\zeta, t), x_2(\zeta, t)]^T$, where $x_1(\zeta, t)$ represents the concentration within the reactor, and $x_2(\zeta, t)$ is introduced as a new state variable to account for the concentration along the recycle stream. The delay is thus modeled as a pure transport process, wherein the first state $x_1(\zeta, t)$ is transported from the reactor outlet to the inlet, experiencing a delay of $\tau$ time units while in the recycle stream. As a result, Equations~\ref{eq:PDE_original_model}~and~\ref{eq:BC} may be re-formulated as follows:
+
+\begin{align}
+    \partial_t 
+    \begin{bmatrix}
+        x_1(\zeta, t) \\ x_2(\zeta,t)
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        D \partial_{\zeta \zeta} - v \partial_\zeta + k_r && 0 \\
+        0 && \frac{1}{\tau} \partial_\zeta
+    \end{bmatrix}
+    \begin{bmatrix}
+        x_1(\zeta, t) \\ x_2(\zeta,t)
+    \end{bmatrix}\\
+\begin{cases}
+    D \partial_\zeta x_1(0, t) - v x_1(0, t) = -v \left[ R x_2(0, t) + (1-R) u(t) \right] \\
+    \partial_\zeta x_1(1, t) = 0 \\
+    x_1(1,t) = x_2(1,t) \\
+    y(t) = x_1(1, t)
+\end{cases}
+\end{align}
+
+With all state variables now expressed explicitly at a specific time instance $t$—in contrast to the previous representation where states at $t$ were directly involved with states at $(t-\tau)$—the open-loop system can be described in the standard state-space form of an infinite-dimensional linear time-invariant (LTI) system as $\dot{\underline{x}} = \mathfrak{A} \underline{x}$. Here, $\mathfrak{A}$ is a linear operator $\mathcal{L}(X)$ acting on a Hilbert space $X: L^2[0,1] \times L^2[0,1]$ and $\underline{x}(\zeta,t)$, as defined previously, is the vector of functions describing the states of the system. The operator $\mathfrak{A}$ and its domain are defined in detail as shown in Equation~(\ref{eq:operator_A}):
+
+\begin{equation} \label{eq:operator_A}
+    \begin{aligned}
+        \mathfrak{A} \equiv&
+        \begin{bmatrix}
+            D \partial_{\zeta \zeta} - v \partial_\zeta + k_r & 0 \\
+            0 & \frac{1}{\tau} \partial_\zeta
+        \end{bmatrix}\\
+        D(\mathfrak{A}) =& \Bigl\{ \underline{x} = [x_1, x_2]^T \in X:
+        \underline{x}(\zeta), \partial_\zeta \underline{x}(\zeta), \partial_{\zeta \zeta} \underline{x}(\zeta) \quad \mathrm{a.c.},\\
+        &D \partial_\zeta x_1(0) - v x_1(0) = -v \left[ R x_2(0) + (1-R) u \right],\\
+        &\partial_\zeta x_1(1) = 0,
+        x_1(1) = x_2(1) \Bigr\}
+    \end{aligned}
+\end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%             Add LTI system and B operator here                     %%%%%%%%%
+%%%%%%%%   Paraphrase/summarize existing text (eigfuns part done already)   %%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The eigenvalue problem for $\mathfrak{A}$ is formulated as:
+
+\begin{equation} \label{eq:eig_prob}
+        \mathfrak{A} \underline{\phi_i}(\zeta) = \lambda_i \underline{\phi_i}(\zeta)
+\end{equation}
+
+
+where $\lambda_i \in \mathbb{C}$ is the $i^{\text{th}}$ eigenvalue. The characteristics equation of the system is obtained by solving the equation $det(\mathfrak{A}-\lambda_i~I)~=~0$ for $\lambda_i$. Attempts to analytically solve this equation has failed; therefore, it is solved numerically using the parameters in Table~\ref{tab:pars}. The resulting eigenvalue distribution is depicted in Figure~\ref{fig:eigval_dist} in the complex plane.
+
+\begin{figure}[!htbp]
+    \centering
+    \includesvg[inkscapelatex=false, width=0.35\textwidth, keepaspectratio]{Figures/eig_val_dist_R_0.3.svg}
+    \caption{Eigenvalues of operator $\mathfrak{A}$.}
+    \label{fig:eigval_dist}
+\end{figure}
+
+
+\begin{table}[ht]
+    \centering
+    \caption{Physical Parameters for the System}
+    \label{tab:pars}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Parameter}        & \textbf{Symbol} & \textbf{Value}     & \textbf{Unit}    \\ \hline
+    Diffusivity               & $D$             & $2\times10^{-5}$   & ${m^2}/{s}$      \\ \hline
+    Velocity                  & $v$             & $0.01$   & ${m}/{s}$        \\ \hline
+    Reaction Constant         & $k_r$           & $1.5$              & $s^{-1}$         \\ \hline
+    Recycle Residence Time    & $\tau$          & $80$               & $s$              \\ \hline
+    Recycle Ratio             & $R$             & $0.3$              & $-$              \\ \hline
+    \end{tabular}
+\end{table}
+
+Following the calculation of eigenvalues, the eigenfunctions $\{ \underline{\phi_i}(\zeta), \underline{\psi_i}(\zeta) \}$ (for $\mathfrak{A}$ and $\mathfrak{A}^*$, respectively) may be obtained. Once the adjoint system properties are determined, the eigenfunctions can be properly scaled to form a bi-orthonormal basis for the Hilbert space $X$; which will be later used in the controller design.
 
 \subsection{Resolvent operator}
 

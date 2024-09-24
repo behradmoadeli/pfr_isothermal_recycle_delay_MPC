@@ -12,3 +12,4 @@ functions/__pycache__/
 *.run.xml
 *.synctex.gz
 Paper/Final/*.zip
+paper/acc_manuscript/root.bbl
