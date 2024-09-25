@@ -65,6 +65,12 @@ G.~Ozorio~Cassol, D.~Ni, and S.~Dubljevic, ``Heat exchanger system boundary regu
 \bibitem{qi2021output}
 J.~Qi, S.~Dubljevic, and W.~Kong, ``Output feedback compensation to state and measurement delays for a first-order hyperbolic pide with recycle,'' \emph{Automatica}, vol. 128, p. 109565, 2021.
 
+\bibitem{havu2007cayley}
+V.~Havu and J.~Malinen, ``The cayley transform as a time discretization scheme,'' \emph{Numerical Functional Analysis and Optimization}, vol.~28, no. 7-8, pp. 825--851, 2007.
+
+\bibitem{xu2017linear}
+Q.~Xu and S.~Dubljevic, ``Linear model predictive control for transport-reaction processes,'' \emph{AIChE Journal}, vol.~63, no.~7, pp. 2644--2659, 2017.
+
 \bibitem{levenspiel1998chemical}
 O.~Levenspiel, \emph{Chemical reaction engineering}.\hskip 1em plus 0.5em minus 0.4em\relax John wiley \& sons, 1998.
 
