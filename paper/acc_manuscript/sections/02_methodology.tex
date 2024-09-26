@@ -101,7 +101,7 @@ where $\delta(\zeta)$ is dirac delta function. This will enable the derivation o
 
 \subsection{Adjoint system}
 
-Next step is to obtain the adjoint system operators $\mathcal{A}^*$ and $\mathcal{B}^*$. Utilizing the relation $\langle \mathfrak{A} \underline{x} + \mathfrak{B} u, \underline{y}\rangle = \langle \underline{x}, \mathfrak{A}^* \underline{y}\rangle + \langle u, \mathfrak{B}^* \underline{y}\rangle$, the adjoint operators $\mathfrak{A}^*$ and $\mathfrak{B}^*$ are obtained as shown in (\ref{eq:adjoint_A}) and (\ref{eq:adjoint_B}), respectively.
+Next step is to obtain the adjoint system operators $\mathfrak{A}^*$ and $\mathfrak{B}^*$. Utilizing the relation $\langle \mathfrak{A} \underline{x} + \mathfrak{B} u, \underline{y}\rangle = \langle \underline{x}, \mathfrak{A}^* \underline{y}\rangle + \langle u, \mathfrak{B}^* \underline{y}\rangle$, the adjoint operators $\mathfrak{A}^*$ and $\mathfrak{B}^*$ are obtained as shown in (\ref{eq:adjoint_A}) and (\ref{eq:adjoint_B}), respectively.
 
 
 \begin{equation} \label{eq:adjoint_A}
@@ -123,14 +123,65 @@ Next step is to obtain the adjoint system operators $\mathcal{A}^*$ and $\mathca
     \mathfrak{B}^* (\cdot) = \Bigl[ v(1-R) \int_0^1 \delta(\zeta) (\cdot) d\zeta \quad , \quad 0 \Bigr]
 \end{equation}
 
-Once the adjoint operators are determined, the eigenfunctions $\{ \underline{\phi_i}(\zeta), \underline{\psi_i}(\zeta) \}$ (for $\mathfrak{A}$ and $\mathfrak{A}^*$, respectively) may be obtained and properly scaled following the calculation of eigenvalues. The set of scaled eigenfunctions will then form a bi-orthonormal basis for the Hilbert space $X$; which will be later used in the controller design.
+Once the adjoint operators are determined, the eigenfunctions $\{ \underline{\phi_i}(\zeta), \underline{\psi_i}(\zeta) \}$ (for $\mathfrak{A}$ and $\mathfrak{A}^*$, respectively) may be obtained and properly scaled following the calculation of eigenvalues. The set of scaled eigenfunctions will then form a bi-orthonormal basis for the Hilbert space $X$; which will be later used in the controller design. It is important to note that the system is not self adjoint, as the obtained adjoint operator and its domain are not the same as the original operator and its domain.
 
 \subsection{Resolvent operator}
 
+One must obtain the resolvent operator of the system prior to constructing the discrete-time representation of the system. One way to represent the resolvent operator is by utilizing the modal characteristics of the system, resulting in an infinite-sum representation of the operator. While being a common practice in the literature, truncating the infinite-sum representation for numerical implementation may lead to a loss of accuracy. Another way to express the resolvent operator is by treating it as an operator that maps either the initial condition of the system $\underline{x}(\zeta,0)$ or the input $u(t)$, to the laplace transform of the state of the system $\underline{X}(\zeta, s)$. This approach, although more computationally intensive, results in a closed form expression for the resolvent operator, preserving the infinite-dimensional nature of the system. The resolvent operator $\mathfrak{R}(s, \mathfrak{A}) = (sI-\mathfrak{A})^{-1}$ is therefore obtained by applying laplace transform to the LTI representation of the system for both for zero-input response and zero-state response, and solving for $\underline{X}(\zeta, s)$.
+% The procedure as well as the resulting closed form expression for the resolvent operator is shown in Appendix~\ref{app:resolvent}.
 
+Since the system generator $\mathfrak{A}$ is not self-adjoint, the resolvent operator for the adjoint system shall also be obtained. This is done in a similar manner as the original system, resulting in a closed-form expression for the adjoint resolvent operator $\mathfrak{R}^*(s, \mathfrak{A}^*)$.
+% as shown in Appendix~\ref{app:resolvent}.
 
 \subsection{Caley-Tustin time discretization}
 
+Having access to the resolvent operators of the original and the adjoint system, the Caley-Tustin time-discretization may be utilized to map the continuous-time setting to the discrete-time setting without losing crucial dynamical properties of the system, such as stability and controllability. This Crank-Nicolson type of discretization is also known as the lowest order symplectic integrator in Gauss quadrature-based Runge-Kutta methods \cite{hairer2006geometric}. Considering $\Delta t$ as the sampling time, and assuming a piecewise constant input within time intervals (a.k.a. zero-order hold), the discrete-time representation $\underline{x}(\zeta, k) = \mathfrak{A}_d \underline{x}(\zeta, k-1) + \mathfrak{B}_d u(k)$ is obtained, with discrete-time operators $\mathfrak{A}_d$ and $\mathfrak{B}_d$ defined in (\ref{eq:discrete_AB}), where $\alpha = 2/{\Delta t}$.
 
+\begin{equation} \label{eq:discrete_AB}
+    \begin{bmatrix}
+        \mathfrak{A}_d & \mathfrak{B}_d
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        -I + 2\alpha \mathfrak{R}(\alpha, \mathfrak{A}) & \sqrt{2\alpha} \mathfrak{R}(\alpha, \mathfrak{A}) \mathfrak{B}
+    \end{bmatrix}
+\end{equation}
+
+As required for systems with nonself-adjoint generators, the adjoint discrete-time operators $\mathfrak{A}_d^*$ and $\mathfrak{B}_d^*$ are also obtained in a similar manner, as shown in (\ref{eq:discrete_AB_star}).
+
+\begin{equation} \label{eq:discrete_AB_star}
+    \begin{bmatrix}
+        \mathfrak{A}_d^* & \mathfrak{B}_d^*
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        -I + 2\alpha \mathfrak{R}^*(\alpha, \mathfrak{A}^*) & \sqrt{2\alpha} \mathfrak{B}^* \mathfrak{R}^*(\alpha, \mathfrak{A}^*)
+    \end{bmatrix}
+\end{equation}
 
 \subsection{Model predictive control design}
+
+The proposed MPC, as shown in Fig.~\ref{fig:block_diagram}, is developed in this section with the goal of stabilizing the given unstable infinite-dimensional system within an optimal framework while satisfying input constraints. An infinite-time open-loop objective function sets the foundation of the controller design in the discrete-time setting at each sampling instant $k$, which consists of a weighted sum of state deviations and actuation costs for all future time instances, subject to the system dynamics and input constraints, as shown in (\ref{eq:MPC_inf_time}).
+
+\begin{equation} \label{eq:MPC_inf_time}
+    \begin{aligned}
+        \min_{U} \quad \sum_{l=0}^{\infty} &\langle \underline{x}(\zeta, k+l | k), \mathfrak{Q} \underline{x}(\zeta, k+l | k) \rangle \\
+        &+ \langle u(k+l+1 | k), \mathfrak{F} u(k+l+1|l) \rangle \\
+        \, \\
+        \text{s.t.} \quad &\underline{x}(\zeta, k+l | k) = \mathfrak{A}_d \underline{x}(\zeta, k+l-1 | k) + \mathfrak{B}_d u(k+l | k) \\
+        &u^{min} \leq u(k+l | k) \leq u^{max}
+    \end{aligned}
+\end{equation}
+
+where $\mathfrak{Q}$ and $\mathfrak{F}$ are positive definite operators of appropriate dimensions, responsible for penalizing state deviations and actuation costs, respectively. 
+
+\begin{figure}[!htbp]
+    \centering
+    \begin{tikzpicture}[node distance=2cm]
+        \node (plant) [block] {Plant};
+        \node (MPC) [block, below of=plant] {MPC};
+        \draw [arrow] (plant.south) -- node[midway, right] {$\underline{x}(\zeta,k)$} (MPC.north);
+        \draw [arrow] (MPC.west) -- ++(-1,0) |- node[near end, above] {$u(k)$} (plant.west);
+        \draw [arrow] (plant.east) -- node[midway, above] {$y(k)$} ++(1,0);
+    \end{tikzpicture}
+    \caption{Proposed full-state feedback model predictive control system.}
+    \label{fig:block_diagram}
+\end{figure}

@@ -80,4 +80,7 @@ K.~F. Jensen and W.~H. Ray, ``The bifurcation behavior of tubular reactors,'' \e
 \bibitem{danckwerts1993continuous}
 P.~V. Danckwerts, ``Continuous flow systems. distribution of residence times,'' \emph{Chemical engineering science}, vol.~50, no.~24, pp. 3857--3866, 1993.
 
+\bibitem{hairer2006geometric}
+E.~Hairer, M.~Hochbruck, A.~Iserles, and C.~Lubich, ``Geometric numerical integration,'' \emph{Oberwolfach Reports}, vol.~3, no.~1, pp. 805--882, 2006.
+
 \end{thebibliography}
