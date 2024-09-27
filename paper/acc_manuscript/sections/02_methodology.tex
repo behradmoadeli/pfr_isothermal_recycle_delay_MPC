@@ -2,12 +2,12 @@
 
 \subsection{Model representation}
 
-The chemical process depicted in Fig.~\ref{fig:reactor_scheme} illustrates a first-order irreversible chemical reaction within an axial dispersion tubular reactor \cite{levenspiel1998chemical}. The reactor features a recycle mechanism, allowing a portion of the product stream to re-enter the reactor, ensuring the consumption of any unreacted substrate. The reactor's dynamics can be described by a second-order parabolic PDE, a common class of equations used to characterize diffusion-convection-reaction systems \cite{jensen1982bifurcation}. The resulting PDE that describes the reactor model is given by (\ref{eq:PDE_original_model}), subject to the boundary conditions in (\ref{eq:BC}), obtained by utilizing first-principle modeling through relevant mass balance relations on an infinitesimally small section of the reactor.
+The chemical process depicted in Fig.~\ref{fig:reactor_scheme} illustrates a first-order irreversible chemical reaction within an axial dispersion tubular reactor \cite{levenspiel1998chemical}. The reactor features a recycle mechanism, allowing a portion of the product stream to re-enter the reactor, ensuring the consumption of any unreacted substrate. The reactor's dynamics can be described by a second-order parabolic PDE, a common class of equations used to characterize diffusion-convection-reaction systems \cite{jensen1982bifurcation}. The resulting PDE that describes the reactor model is given by (\ref{eq:PDE_original_model}), subject to the boundary conditions in (\ref{eq:BC}), obtained by utilizing first-principle modeling through relevant mass balance relations on an infinitesimally thin disk-like section along the axis of the reactor.
 
 \begin{figure}[!htbp] 
     \centering
     \begin{tikzpicture}
-        \node (pfr) [cylinder, draw, minimum height=3cm, minimum width=1cm, shape aspect=1, shape border rotate=180, cylinder uses custom fill, cylinder end fill=gray!45, cylinder body fill=gray!15] {$\underline{A} \rightarrow \underline{B}$};
+        \node (pfr) [cylinder, draw, minimum height=3cm, minimum width=1cm, shape aspect=1, shape border rotate=180, cylinder uses custom fill, cylinder end fill=gray!45, cylinder body fill=gray!15] {$\mathcal{A} \rightarrow \mathcal{B}$};
         \node (pfr_inlet) [circle, left of=pfr, xshift=-0.5cm, fill=black, draw, inner sep=0pt, minimum size=0.25cm, scale=0.5] {};
         \node (pfr_outlet) [circle, at={(pfr.east)}, shift={(-0.25cm,0)}, fill=black, draw, inner sep=0pt, minimum size=0.25cm, scale=0.5] {};
         \node (recycle_right) [circle, right of=pfr_outlet, fill=black, draw, inner sep=0pt, minimum size=0.25cm, scale=0.5] {};
@@ -74,7 +74,7 @@ In the case where the problem involves similar forms of PDEs, an effective gener
     \end{aligned}
 \end{equation}
 
-where $\delta(\zeta)$ is dirac delta function. This will enable the derivation of the system's spectrum using the eigenvalue problem. The characteristics equation of the system is obtained by solving the equation $det(\mathfrak{A}-\lambda_i~I)~=~0$ for $\lambda_i$, where $\lambda_i \in \mathbb{C}$ is the $i^{\text{th}}$ eigenvalue of the system. Attempts to analytically solve this equation has failed; therefore, it is solved numerically using the parameters in Table~\ref{tab:pars}. The resulting eigenvalue distribution is depicted in Figure~\ref{fig:eigval_dist} in the complex plane.
+where $\delta(\zeta)$ is dirac delta function. This will enable the derivation of the system's spectrum using the eigenvalue problem. The characteristics equation of the system is obtained by solving the equation $det(\mathfrak{A}-\lambda_i~I)~=~0$ for $\lambda_i$, where $\lambda_i \in \mathbb{C}$ is the $i^{\text{th}}$ eigenvalue of the system and $I$ is the identity operator. Attempts to analytically solve this equation has failed; therefore, it is solved numerically using the parameters in Table~\ref{tab:pars}. The resulting eigenvalue distribution is depicted in Figure~\ref{fig:eigval_dist} in the complex plane.
 
 \begin{figure}[!htbp]
     \centering
@@ -198,22 +198,50 @@ where $\mathfrak{Q}$ and $\mathfrak{F}$ are positive definite operators of appro
     \end{aligned}
 \end{equation}
 
-In (\ref{eq:MPC_finite_time}), $\mathfrak{P}$ is the terminal cost operator, which can be proven to be positive definite only if the terminal state $\underline{x}(\zeta, k+N | k)$ is in a stable subspace. Therefore, an equality constraint is introduced to guarantee that the resulting quadratic optimization problem is convex. The terminal constraint is enforced by setting the projection of the terminal state onto the unstable subspace of the system to zero \cite{xu2017linear, khatibi2021model}. Here, $\underline{\phi_u}(\zeta)$ is the set of unstable eigenfunctions of the system, for all eigenvalues where $\operatorname{Re}(\lambda_u) \geq 0$.
+Obtained as the solution to the discrete-time Lyapunov equation, $\mathfrak{P}$ is the terminal cost operator as shown in (\ref{eq:terminal_cost}); which can be proven to be positive definite only if the terminal state $\underline{x}(\zeta, k+N | k)$ is in a stable subspace. Therefore, an equality constraint is introduced to guarantee that the resulting quadratic optimization problem is convex. The terminal constraint is enforced by setting the projection of the terminal state onto the unstable subspace of the system to zero \cite{curtainbook, xu2017linear, khatibi2021model}. Here, $\underline{\phi_u}(\zeta)$ is the set of unstable eigenfunctions of the system, for all eigenvalues where $\operatorname{Re}(\lambda_u) \geq 0$.
+
+\begin{equation} \label{eq:terminal_cost}
+    \mathfrak{P} (\cdot) = \sum_{m=0}^{\infty} \sum_{n=0}^{\infty} 
+    -\frac{
+        \langle \underline{\phi_m} , \mathfrak{Q} \underline{\psi_n} \rangle
+    }{
+        \lambda_m + \overline{\lambda_n}
+    }
+    \langle (\cdot) , \underline{\psi_n} \rangle \phi_m
+\end{equation}
 
 One may further process the optimization problem in (\ref{eq:MPC_finite_time}) to obtain a standard format for quadratic programming (QP) solvers by substituting the future states in terms of the current state and the sequence of future inputs using system dynamics expression. The resulting QP problem is given in (\ref{eq:MPC_QP}). The optimal input sequence $U$ is then obtained by solving the QP problem at each sampling instant $k$. To implement a receding horizon control strategy, only the first input of the optimal sequence $u(k|k)$ is applied to the system, and the optimization problem is solved again at the next sampling instant $k+1$.
 
 \begin{equation} \label{eq:MPC_QP}
     \begin{aligned}
-        \min_{U} J = &U^T \langle I,H \rangle U + 2U^T \langle I, P \underline{x}(\zeta, k|k) \rangle \\
-        \text{s.t.} \quad &U^{min} \leq U \leq U^{max} \\
-        &T_u \underline{x}(\zeta, k|k) + S_u U = 0
+        \min_{U} &J = U^T \langle I,H \rangle U + 2U^T \langle I, P \underline{x}(\zeta, k|k) \rangle \\
+        \text{s.t.} &\qquad U^{min} \leq U \leq U^{max} \\
+        &\qquad T_u \underline{x}(\zeta, k|k) + S_u U = 0
         \, \\
         \text{with:} &\\
-        &\quad H = \begin{bmatrix}
-            \mathfrak{F} & 0 & \cdots & 0 \\
-            0 & \mathfrak{F} & \cdots & 0 \\
+        H = &\begin{bmatrix}
+            \mathfrak{B}_d^* \mathfrak{P} \mathfrak{B}_d + \mathfrak{F} & \mathfrak{B}_d^* \mathfrak{A}_d^* \mathfrak{P} \mathfrak{B}_d & \cdots &  \mathfrak{B}_d^* {\mathfrak{A}_d^*}^{N-1} \mathfrak{P} \mathfrak{B}_d \\
+            \mathfrak{B}_d^* \mathfrak{P} \mathfrak{A}_d \mathfrak{B}_d & \mathfrak{B}_d^* \mathfrak{P} \mathfrak{B}_d + \mathfrak{F} & \cdots & \mathfrak{B}_d^* {\mathfrak{A}_d^*}^{N-2} \mathfrak{P} \mathfrak{B}_d \\
             \vdots & \vdots & \ddots & \vdots \\
-            0 & 0 & \cdots & \mathfrak{P}
+            \mathfrak{B}_d^* \mathfrak{P} {\mathfrak{A}_d}^{N-1} \mathfrak{B}_d & \mathfrak{B}_d^* \mathfrak{P} {\mathfrak{A}_d}^{N-2} \mathfrak{B}_d & \cdots & \mathfrak{B}_d^* \mathfrak{P} \mathfrak{B}_d + \mathfrak{F}
         \end{bmatrix} \\
+        P = &\begin{bmatrix}
+            \mathfrak{B}_d^* \mathfrak{P} {\mathfrak{A}_d} &
+            \mathfrak{B}_d^* \mathfrak{P} {\mathfrak{A}_d}^{2}  &
+            \hdots &
+            \mathfrak{B}_d^* \mathfrak{P} {\mathfrak{A}_d}^{N} 
+        \end{bmatrix}^T \\
+        T_u (\cdot) = &\begin{bmatrix}
+            \langle {\mathfrak{A}_d}^{N} (\cdot), \underline{\phi_u} \rangle
+        \end{bmatrix} \\
+        S_u = &\begin{bmatrix}
+            \langle {\mathfrak{A}_d}^{N-1} \mathfrak{B}_d, \underline{\phi_u} \rangle & 
+            \langle {\mathfrak{A}_d}^{N-2} \mathfrak{B}_d, \underline{\phi_u} \rangle &
+            \hdots &
+            \langle \mathfrak{B}_d, \underline{\phi_u} \rangle
+        \end{bmatrix} \\
+        U = &\begin{bmatrix}
+            u(k+1|k) & u(k+2|k) & \hdots & u(k+N|k)
+        \end{bmatrix}^T
     \end{aligned}
 \end{equation}
