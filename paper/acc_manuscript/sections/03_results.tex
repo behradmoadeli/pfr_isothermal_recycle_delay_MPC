@@ -1,6 +1,6 @@
 \section{Results and Discussion}
 
-Numerical simulations for the open-loop system and the closed-loop system under the proposed MPC are presented in this section, with the choice of parameters given in Table \ref{tab:pars}. As the eigenvalue distribution obtained in Fig(\ref{fig:eigval_dist}) suggests, the open-loop system is unstable due to the presence of an eigenvalue with positive real part. The zero-input response of the system is shown in Fig(\ref{fig:openloop_response}) where the initial condition for the reactor is set to $c(\zeta,0) = \sin^2(\pi \zeta)$. The recycle stream is assumed to be empty at the beginning of the simulation.
+Numerical simulations for the open-loop system and the closed-loop system under the proposed MPC are presented in this section, with parameters chosen according to Table~\ref{tab:pars}. As the eigenvalue distribution obtained in Fig(\ref{fig:eigval_dist}) suggests, the open-loop system is unstable due to the presence of an eigenvalue with positive real part. The zero-input response of the system is shown in Fig(\ref{fig:openloop_response}) where the initial condition for the reactor is set to $c(\zeta,0) = \sin^2(\pi \zeta)$. The recycle stream is assumed to be empty at the beginning of the simulation.
 
 \begin{figure}[!htbp]
     \centering
@@ -9,7 +9,7 @@ Numerical simulations for the open-loop system and the closed-loop system under 
     \label{fig:openloop_response}
 \end{figure}
 
-An infinite-dimensional MPC is designed and applied to the unstable system. The state deviation and actuation penalty terms are set as $\mathfrak{Q} = 0.04 I$ and $\mathfrak{F} = 27$. The sampling time and the horizon length for the MPC are set to $\Delta t = 20$ s and $N = 9$, respectively. Lastly, the input constraints are assumed to be $0 \leq u(t) \leq 0.15$. The closed-loop response of the system is shown in Fig(\ref{fig:closedloop_response}) and the control input is shown in Fig(\ref{fig:control_input}). It may be confirmed that the MPC successfully stabilizes the unstable system while satisfying the input constraints.
+An infinite-dimensional MPC is designed and applied to the unstable system. The state deviation and actuation penalty terms are set as $\mathfrak{Q} = 0.04 I$ and $\mathfrak{F} = 27$. The sampling time and the horizon length for the MPC are set to $\Delta t = 20$ s and $N = 9$, respectively. Lastly, the input constraints are assumed to be $0 \leq u(t) \leq 0.15$. The closed-loop response of the system is shown in Fig(\ref{fig:closedloop_response}) and the control input as well as the system output is shown in Fig(\ref{fig:control_input}). It may be confirmed that the MPC successfully stabilizes the unstable system while satisfying the input constraints.
 
 \begin{figure}[!htbp]
     \centering
@@ -25,4 +25,4 @@ An infinite-dimensional MPC is designed and applied to the unstable system. The 
     \label{fig:control_input}
 \end{figure}
 
-One interesting aspect of considering recycle stream is the oscillatory behavior of the system dynamics. While axial dispersion reactors show no oscillation in the absence of recycle, the presence of recycle stream can introduce such behavior. The choice of control horizon is another key factor. A short control horizon relative to the resident time of the recycle stream can lead to oscillatory input profiles due to the presence of delayed recycle stream. In this example, the control horizon, i.e. $180$ s, is set to be considerably longer than the recycle delay, which is $80$ s; resulting in a non-oscillatory input profile.
+One interesting aspect of considering recycle stream is the oscillatory behavior of the system dynamics. While axial dispersion reactors show no oscillation in the absence of recycle, the nature of recycle streams can introduce such behavior. The choice of control horizon is another key factor. A short control horizon relative to the resident time of the recycle stream can lead to oscillatory input profiles due to the presence of delayed recycle stream. In this example, the control horizon, i.e. $180$ s, is set to be considerably longer than the recycle delay, which is $80$ s; resulting in a non-oscillatory input profile.

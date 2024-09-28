@@ -2,6 +2,63 @@
 
 \subsection{Resolvent Operator of the Original System}
 
-\textbf{I have made enough space to include this here}
+The resolvent is defined as the operator that maps either the initial condition or the input of the system to the Laplace transform of the state, as shown in \eqref{eq:resolvent}.
 
-\subsection{Resolvent Operator of the Adjoint System}
+\begin{equation} \label{eq:resolvent}
+\begin{aligned}
+    \dot{\underline{x}}(\zeta, t) &= \mathfrak{A} \underline{x}(\zeta, t) + \mathfrak{B} u(t) \xrightarrow{\mathcal{L}}\\
+    s \underline{X}(\zeta,s) - \underline{x}(\zeta,0) &= \mathfrak{A} \underline{X}(\zeta,s) + \mathfrak{B} U(s)\\
+    &\hspace{-7.5em}\begin{cases}
+        u = 0 \Rightarrow \underline{X}(\zeta,s) = (sI - \mathfrak{A})^{-1} \underline{x}(\zeta,0) = \mathfrak{R}(s, \mathfrak{A}) \underline{x}(\zeta,0)\\
+        x = 0 \Rightarrow \underline{X}(\zeta,s) = (sI - \mathfrak{A})^{-1} \mathfrak{B} U(s) = \mathfrak{R}(s, \mathfrak{A}) \mathfrak{B} U(s)
+    \end{cases}
+\end{aligned}
+\end{equation}
+
+First step to obtain the solution for $\underline{X}(\zeta, s)$ is to apply Laplace transform to the original system of PDEs in \eqref{eq:operator_A} to end up with a new $3 \times 3$ system of ODEs as shown in \eqref{eq:laplace_transformed}.
+
+\begin{equation} \label{eq:laplace_transformed}
+\begin{aligned}
+    \partial_\zeta \overbrace{\begin{bmatrix}
+        X_1(\zeta,s)\\ \partial_\zeta X_1(\zeta,s)\\ X_2(\zeta,s)
+    \end{bmatrix}}^{\underline{\tilde{X}}(\zeta,s)} &= \overbrace{\begin{bmatrix}
+        0 & 1 & 0\\
+        \frac{s-k}{D} & \frac{v}{D} & 0\\
+        0 & 0 & s\tau
+        \end{bmatrix}}^{P(s)} \, \begin{bmatrix}
+            X_1(\zeta,s)\\ \partial_\zeta X_1(\zeta,s)\\ X_2(\zeta,s)
+        \end{bmatrix} \\
+        &+ \underbrace{\begin{bmatrix}
+            0\\ -\frac{x_1(\zeta,0)}{D} + v(1-R) \delta(\zeta) U(s)\\ -\tau x_2(\zeta,0)
+        \end{bmatrix}}_{Z(\zeta,s)} \\
+        \Rightarrow \partial_\zeta \underline{\tilde{X}}(\zeta,s) &= P(s) \underline{\tilde{X}}(\zeta,s) + Z(\zeta,s)
+\end{aligned}
+\end{equation} 
+
+The solution for the obtained ODE is given by \eqref{eq:ODE_solution}.
+
+\begin{equation} \label{eq:ODE_solution}
+    \underline{\tilde{X}}(\zeta,s) = \underbrace{e^{P(s)\zeta}}_{T(\zeta,s)} \underline{\tilde{X}}(0,s) + \int_0^\zeta \underbrace{e^{P(s)(\zeta - \eta)}}_{F(\zeta, \eta)} Z(\eta,s) d\eta
+\end{equation}
+
+Since the boundary conditions are not homogeneous, $\underline{\tilde{X}}(0,s)$ needs to be obtained by solving the system of algebraic equations given in \eqref{eq:BC_AE}; which is the result of applying Danckwerts boundary conditions to the Laplace transformed system of PDEs at $\zeta = 1$.
+
+\begin{equation} \label{eq:BC_AE}
+\begin{aligned}
+        &\overbrace{\begin{bmatrix}
+            -v & D & Rv\\
+            T_{1,1}(1,s) & T_{1,2}(1,s) & -T_{3,3}(1,s)\\
+            T_{2,1}(1,s) & T_{2,2}(1,s) & 0
+        \end{bmatrix}}^{M^{-1}(s)} \underline{\tilde{X}}(0,s) =\\ 
+        &\underbrace{\int_0^1 \begin{bmatrix}
+            0\\ F_{3,3}(1, \eta) Z_3(\eta,s) - F_{1,2}(1, \eta) Z_2(\eta,s)\\ -F_{2,2}(1, \eta) Z_2(\eta,s)
+        \end{bmatrix} d\eta}_{\underline{b}(s)} \\
+        \Rightarrow &\underline{\tilde{X}}(0,s) = M(s) \underline{b}(s)
+\end{aligned}
+\end{equation}
+
+Having access $\underline{\tilde{X}}(0,s)$, the solution for $\underline{X}(\zeta,s)$ can be explicitly derived. The resolvent operator for zero-input and zero-state cases are therefore obtained as shown in \eqref{eq:resolvent_x} and \eqref{eq:resolvent_u}, respectively.
+
+
+
+\subsection{Resolvent Operator of the Adjoint System} 
