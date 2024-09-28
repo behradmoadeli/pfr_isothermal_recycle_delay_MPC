@@ -218,8 +218,8 @@ One may further process the optimization problem in (\ref{eq:MPC_finite_time}) t
         \text{s.t.} &\qquad U^{min} \leq U \leq U^{max} \\
         &\qquad T_u \underline{x}(\zeta, k|k) + S_u U = 0
         \, \\
-        \text{with:} &\\
-        H = &\begin{bmatrix}
+        \text{with } &H = \\
+        &\hspace{-3.5em }\begin{bmatrix}
             \mathfrak{B}_d^* \mathfrak{P} \mathfrak{B}_d + \mathfrak{F} & \mathfrak{B}_d^* \mathfrak{A}_d^* \mathfrak{P} \mathfrak{B}_d & \cdots &  \mathfrak{B}_d^* {\mathfrak{A}_d^*}^{N-1} \mathfrak{P} \mathfrak{B}_d \\
             \mathfrak{B}_d^* \mathfrak{P} \mathfrak{A}_d \mathfrak{B}_d & \mathfrak{B}_d^* \mathfrak{P} \mathfrak{B}_d + \mathfrak{F} & \cdots & \mathfrak{B}_d^* {\mathfrak{A}_d^*}^{N-2} \mathfrak{P} \mathfrak{B}_d \\
             \vdots & \vdots & \ddots & \vdots \\
