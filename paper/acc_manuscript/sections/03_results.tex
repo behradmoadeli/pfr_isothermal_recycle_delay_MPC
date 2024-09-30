@@ -4,21 +4,21 @@ Numerical simulations for the open-loop system and the closed-loop system under 
 
 An infinite-dimensional MPC is designed and applied to the unstable system. The state deviation and actuation penalty terms are set as $\mathfrak{Q} = 0.04 I$ and $\mathfrak{F} = 27$. The sampling time and the horizon length for the MPC are set to $\Delta t = 20$ s and $N = 9$, respectively. Lastly, the input constraints are assumed to be $0 \leq u(t) \leq 0.15$. The closed-loop response of the system is shown in Fig(\ref{fig:closedloop_response}) and the control input as well as the system output is shown in Fig(\ref{fig:control_input}). It may be confirmed that the MPC successfully stabilizes the unstable system while satisfying the input constraints.
 
-\begin{figure}[p]
+\begin{figure}[!htbp]
     \centering
     \includesvg[inkscapelatex=false, width=0.45\textwidth, keepaspectratio]{Figures/openloop_response.svg}
     \caption{Open-loop concentration profile along the reactor.}
     \label{fig:openloop_response}
 \end{figure}
 
-\begin{figure}[tbp]
+\begin{figure}[!htbp]
     \centering
     \includesvg[inkscapelatex=false, width=0.45\textwidth, keepaspectratio]{Figures/closedloop_response.svg}
     \caption{Stabilized reactor concentration profile under the proposed MPC.}
     \label{fig:closedloop_response}
 \end{figure}
 
-\begin{figure}[tbp]
+\begin{figure}[!htbp]
     \centering
     \includesvg[inkscapelatex=false, width=0.45\textwidth, keepaspectratio]{Figures/input.svg}
     \caption{Input constraints, the obtained input profile, and the reactor output under the proposed MPC.}
