@@ -48,7 +48,7 @@ S.~Khatibi, G.~O. Cassol, and S.~Dubljevic, ``Model predictive control of a non-
 R.~Curtain and H.~Zwart, \emph{Introduction to infinite-dimensional systems theory: a state-space approach}.\hskip 1em plus 0.5em minus 0.4em\relax Springer Nature, 2020, vol.~71, ch. 3.2: `Riesz-spectral operators', pp. 79--108.
 
 \bibitem{krstic2009book}
-M.~Krstić, ser. Systems \& control.\hskip 1em plus 0.5em minus 0.4em\relax Birkhäuser, 2009, ch. 1.8: `DDE or Transport PDE Representation', p.~9.
+M.~Krstić, \emph{Delay compensation for nonlinear, adaptive, and PDE systems}, ser. Systems \& control.\hskip 1em plus 0.5em minus 0.4em\relax Birkhäuser, 2009, ch. 1.8: `DDE or Transport PDE Representation', p.~9.
 
 \bibitem{Hiratsuka1969IEEE}
 S.~Hiratsuka and A.~Ichikawa, ``Optimal control of systems with transportation lags,'' \emph{IEEE Transactions on Automatic Control}, vol.~14, no.~3, pp. 237--247, 1969.
