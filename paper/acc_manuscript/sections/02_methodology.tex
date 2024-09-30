@@ -2,7 +2,7 @@
 
 \subsection{Model representation}
 
-The chemical process depicted in Fig.~\ref{fig:reactor_scheme} illustrates a first-order irreversible chemical reaction within an axial dispersion tubular reactor \cite{levenspiel1998chemical}. The reactor features a recycle mechanism, allowing a portion of the product stream to re-enter the reactor, ensuring the consumption of any unreacted substrate. The reactor's dynamics can be described by a second-order parabolic PDE, a common class of equations used to characterize diffusion-convection-reaction systems \cite{jensen1982bifurcation}. The resulting PDE that describes the reactor model is given by \eqref{eq:PDE_original_model}, subject to the boundary conditions in \eqref{eq:BC}, obtained by utilizing first-principle modeling through relevant mass balance relations on an infinitesimally thin disk-like section along the axis of the reactor.
+The chemical process depicted in Fig.~\ref{fig:reactor_scheme} illustrates a first-order irreversible chemical reaction within an axial dispersion tubular reactor \cite{levenspiel1998chemical}. The reactor features a recycle mechanism, allowing a portion of the product stream to re-enter the reactor, ensuring the consumption of any unreacted substrate. The reactor's dynamics can be described by a second-order parabolic PDE, a common class of equations used to characterize diffusion-convection-reaction systems \cite{jensen1982bifurcation}. The resulting PDE that describes the reactor model is given by \eqref{eq:PDE_original_model}, subject to the boundary conditions in \eqref{eq:BC}, obtained by utilizing first-principle modeling through relevant mass balance relations on an infinitesimally thin disk element along the longitudinal axis of the reactor.
 
 \begin{figure}[!htbp] 
     \centering
@@ -46,7 +46,7 @@ Here, $c(\zeta, t)$ is the concentration of the product along the reactor, repre
 
 In an attempt to make the model more realistic for common axial dispersion tubular reactors in chemical industry, Dankwerts boundary conditions are chosen as they are known to be suitable for this purpose by accounting for deviations from perfect mixing and piston flow, assuming negligible transport lags in connecting lines \cite{danckwerts1993continuous}. The delayed state resulting from the recycled portion of the flow, occurring $\tau$ seconds back in time, is applied at the inlet boundary condition, as shown in \eqref{eq:BC}.
 
-In the case where the problem involves similar forms of PDEs, an effective general practice to address delays in systems is to reformulate the problem such that the notion of delay is replaced with an alternative transport PDE. Therefore, a new state variable $\underline{x}(\zeta, t) \equiv [x_1(\zeta, t), x_2(\zeta, t)]^T$ is defined as a vector of functions, where $x_1(\zeta, t)$ represents the concentration within the reactor—analogous to $c(\zeta,t)$—and $x_2(\zeta, t)$ is introduced as a new state variable to account for the concentration along the recycle stream. The delay is thus modeled as a pure transport process, wherein the first state $x_1(\zeta, t)$ is transported from the reactor outlet to the inlet, experiencing a delay of $\tau$ time units while in the recycle stream. This makes all state variables expressed explicitly at a specific time instance $t$, resulting in the standard state-space form for a given infinite-dimensional linear time-invariant (LTI) system as $\dot{\underline{x}} = \mathfrak{A} \underline{x} + \mathfrak{B} u$. Here, $\mathfrak{A}$ is a linear operator $\mathcal{L}(X)$ acting on a Hilbert space $X: L^2[0,1] \times L^2[0,1]$ and $\underline{x}(\zeta,t)$, as defined previously, is the vector of functions describing the states of the system. The operator $\mathfrak{A}$ and its domain are defined in detail as shown in \eqref{eq:operator_A}. Also, $\mathfrak{B}$ is a linear operator that maps the scalar input from input-space onto the state space, as defined in \eqref{eq:operator_B}.
+In the case where the problem involves similar forms of PDEs, an effective general practice to address delays in systems is to reformulate the problem such that the notion of delay is replaced with an alternative transport PDE. Therefore, a new state variable $\underline{x}(\zeta, t) \equiv [x_1(\zeta, t), x_2(\zeta, t)]^T$ is defined as a vector of functions, where $x_1(\zeta, t)$ represents the concentration within the reactor—analogous to $c(\zeta,t)$—and $x_2(\zeta, t)$ is introduced as a new state variable to account for the concentration along the recycle stream. The delay is thus modeled as a pure transport process, wherein the first state $x_1(\zeta, t)$ is transported from the reactor outlet to the inlet, experiencing a delay of $\tau$ time units while in the recycle stream. This makes all state variables expressed explicitly at a specific time instance $t$, resulting in the standard state-space form for a given infinite-dimensional linear time-invariant (LTI) system $\dot{\underline{x}} = \mathfrak{A} \underline{x} + \mathfrak{B} u$. Here, $\mathfrak{A}$ is a linear operator $\mathcal{L}(X)$ acting on a Hilbert space $X: L^2[0,1] \times L^2[0,1]$ and $\underline{x}(\zeta,t)$, as defined previously, is the vector of functions describing the states of the system. The operator $\mathfrak{A}$ and its domain are defined in detail as shown in \eqref{eq:operator_A}. Also, $\mathfrak{B}$ is a linear operator that maps the scalar input from input-space onto the state space, as defined in \eqref{eq:operator_B}.
 
 \begin{equation} \label{eq:operator_A}
     \begin{aligned}
@@ -127,20 +127,20 @@ Once the adjoint operators are determined, the eigenfunctions $\{ \underline{\ph
 
 \subsection{Resolvent operator}
 
-One must obtain the resolvent operator of the system prior to constructing the discrete-time representation of the system. One way to represent the resolvent operator is by utilizing the modal characteristics of the system, resulting in an infinite-sum representation of the operator. While being a common practice in the literature, truncating the infinite-sum representation for numerical implementation may lead to a loss of accuracy. Another way to express the resolvent operator is by treating it as an operator that maps either the initial condition of the system $\underline{x}(\zeta,0)$ or the input $u(t)$, to the Laplace transform of the state of the system $\underline{X}(\zeta, s)$. This approach, although more computationally intensive, results in a closed form expression for the resolvent operator, preserving the infinite-dimensional nature of the system. The resolvent operator $\mathfrak{R}(s, \mathfrak{A}) = (sI-\mathfrak{A})^{-1}$ is therefore obtained by applying Laplace transform to the LTI representation of the system for both for zero-input response and zero-state response, and solving for $\underline{X}(\zeta, s)$, as shown in \eqref{eq:resolvent}.
+One must obtain the resolvent operator of the system $\mathfrak{R}(s, \mathfrak{A}) = (sI-\mathfrak{A})^{-1}$ prior to constructing the discrete-time representation of the system. One way to obtain it is by utilizing the modal characteristics of the system, resulting in an infinite-sum representation of the operator. While being a common practice in the literature, truncating the infinite-sum representation for numerical implementation may lead to a loss of accuracy. Another way to express the resolvent operator is by treating it as an operator that maps either the initial condition of the system $\underline{x}(\zeta,0)$ or the input $u(t)$, to the Laplace transform of the state of the system $\underline{X}(\zeta, s)$. This approach, although more computationally intensive, results in a closed form expression for the resolvent operator, preserving the infinite-dimensional nature of the system. In \eqref{eq:resolvent}, Laplace transform is applied to the LTI representation of the system for both zero-input response and zero-state response to obtain a general expression for the resolvent operator.
 
 \begin{equation} \label{eq:resolvent}
     \begin{aligned}
         \dot{\underline{x}}(\zeta, t) &= \mathfrak{A} \underline{x}(\zeta, t) + \mathfrak{B} u(t) \xrightarrow{\mathcal{L}}\\
         s \underline{X}(\zeta,s) - \underline{x}(\zeta,0) &= \mathfrak{A} \underline{X}(\zeta,s) + \mathfrak{B} U(s)\\
         &\hspace{-7.5em}\begin{cases}
-            u = 0 \Rightarrow \underline{X}(\zeta,s) = (sI - \mathfrak{A})^{-1} \underline{x}(\zeta,0) = \mathfrak{R}(s, \mathfrak{A}) \underline{x}(\zeta,0)\\
-            x = 0 \Rightarrow \underline{X}(\zeta,s) = (sI - \mathfrak{A})^{-1} \mathfrak{B} U(s) = \mathfrak{R}(s, \mathfrak{A}) \mathfrak{B} U(s)
+            \xrightarrow{u = 0} &\underline{X}(\zeta,s) = (sI - \mathfrak{A})^{-1} \underline{x}(\zeta,0) = \mathfrak{R}(s, \mathfrak{A}) \underline{x}(\zeta,0)\\
+            \xrightarrow{\underline{x}(0, \zeta)}& \underline{X}(\zeta,s) = (sI - \mathfrak{A})^{-1} \mathfrak{B} U(s) = \mathfrak{R}(s, \mathfrak{A}) \mathfrak{B} U(s)
         \end{cases}
     \end{aligned}
     \end{equation}
     
-    First step to obtain the solution for $\underline{X}(\zeta, s)$ is to apply Laplace transform to the original system of PDEs in \eqref{eq:operator_A} to end up with a new $3 \times 3$ system of ODEs as shown in \eqref{eq:laplace_transformed}.
+    The goal is to obtain the solution for $\underline{X}(\zeta, s)$ and compare it with the general expression obtained in \eqref{eq:resolvent} to get the closed form expression for the resolvent operator. First step is to apply Laplace transform to the original system of PDEs in \eqref{eq:operator_A}. The second order derivative term is decomposed to two first order PDEs, constructing a new $3 \times 3$ system of first order ODEs with respect to $\zeta$ after Laplace transformation, as shown in \eqref{eq:laplace_transformed}.
     
     \begin{equation} \label{eq:laplace_transformed}
     \begin{aligned}
@@ -160,7 +160,7 @@ One must obtain the resolvent operator of the system prior to constructing the d
     \end{aligned}
     \end{equation} 
     
-    The solution for the obtained ODE is given by \eqref{eq:ODE_solution}.
+    with solution given by \eqref{eq:ODE_solution}.
     
     \begin{equation} \label{eq:ODE_solution}
         \underline{\tilde{X}}(\zeta,s) = \underbrace{e^{P(s)\zeta}}_{T(\zeta,s)} \underline{\tilde{X}}(0,s) + \int_0^\zeta \underbrace{e^{P(s)(\zeta - \eta)}}_{F(\zeta, \eta)} Z(\eta,s) d\eta
@@ -259,19 +259,19 @@ The proposed MPC, as shown in Fig.~\ref{fig:block_diagram}, is developed in this
 \begin{equation} \label{eq:MPC_inf_time}
     \begin{aligned}
         \min_{U} \quad \sum_{l=0}^{\infty} &\langle \underline{x}(\zeta, k+l | k), \mathfrak{Q} \underline{x}(\zeta, k+l | k) \rangle \\
-        + &\langle u(k+l+1 | k), \mathfrak{F} u(k+l+1|l) \rangle \\
+        + &\langle u(k+l+1 | k), \mathfrak{F} u(k+l+1|k) \rangle \\
         \, \\
         \text{s.t.} \quad &\underline{x}(\zeta, k+l | k) = \mathfrak{A}_d \underline{x}(\zeta, k+l-1 | k) + \mathfrak{B}_d u(k+l | k) \\
         &u^{min} \leq u(k+l | k) \leq u^{max}
     \end{aligned}
 \end{equation}
 
-where $\mathfrak{Q}$ and $\mathfrak{F}$ are positive definite operators of appropriate dimensions, responsible for penalizing state deviations and actuation costs, respectively. The notation $(k+l|k)$ indicates the future time states or input instance $k+l$ obtained at time $k$. The infinite-time optimization problem may be reduced to a finite-time setup by assigning zero-input beyond a certain control horizon $N$, result in the optimization problem in \eqref{eq:MPC_finite_time}.
+where $\mathfrak{Q}$ and $\mathfrak{F}$ are positive definite operators of appropriate dimensions, responsible for penalizing state deviations and actuation costs, respectively. The notation $(k+l|k)$ indicates the future time states or input instance $k+l$ obtained at time $k$. The infinite-time optimization problem may be reduced to a finite-time setup by assigning zero-input beyond a certain control horizon $N$, resulting in the optimization problem in \eqref{eq:MPC_finite_time}.
 
 \begin{equation} \label{eq:MPC_finite_time}
     \begin{aligned}
         \min_{U} \quad \sum_{l=0}^{N-1} &\langle \underline{x}(\zeta, k+l | k), \mathfrak{Q} \underline{x}(\zeta, k+l | k) \rangle \\
-        + &\langle u(k+l+1 | k), \mathfrak{F} u(k+l+1|l) \rangle \\
+        + &\langle u(k+l+1 | k), \mathfrak{F} u(k+l+1|k) \rangle \\
         + &\langle \underline{x}(\zeta, k+N | k), \mathfrak{P} \underline{x}(\zeta, k+N | k) \rangle \\
         \, \\
         \text{s.t.} \quad &\underline{x}(\zeta, k+l | k) = \mathfrak{A}_d \underline{x}(\zeta, k+l-1 | k) + \mathfrak{B}_d u(k+l | k) \\
@@ -292,7 +292,7 @@ Obtained as the solution to the discrete-time Lyapunov equation, $\mathfrak{P}$ 
     \langle (\cdot) , \underline{\psi_n} \rangle \phi_m
 \end{equation}
 
-One may further process the optimization problem in \eqref{eq:MPC_finite_time} to obtain a standard format for quadratic programming (QP) solvers by substituting the future states in terms of the current state and the sequence of future inputs using system dynamics expression. The resulting QP problem is given in \eqref{eq:MPC_QP}. The optimal input sequence $U$ is then obtained by solving the QP problem at each sampling instant $k$. To implement a receding horizon control strategy, only the first input of the optimal sequence $u(k|k)$ is applied to the system, and the optimization problem is solved again at the next sampling instant $k+1$.
+One may further process the optimization problem in \eqref{eq:MPC_finite_time} to obtain a standard format for quadratic programming (QP) solvers by substituting the future states in terms of the current state and the sequence of future inputs using system dynamics expression. The resulting QP problem is given in \eqref{eq:MPC_QP}. The optimal input sequence $U$ is then obtained by solving the QP problem at each sampling instant $k$. To implement a receding horizon control strategy, only the first input of the optimal sequence $u(k+1|k)$ is applied to the system, and the optimization problem is solved again at the next sampling instant $k+1$.
 
 \begin{equation} \label{eq:MPC_QP}
     \begin{aligned}
