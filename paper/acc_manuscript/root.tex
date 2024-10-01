@@ -49,15 +49,15 @@
 \makeatletter
 
 \title{\LARGE \bf
-Model Predictive Control of Axial Dispersion Tubular Reactors\\ with Recycle: Addressing State-delay through Transport PDEs*
+Model Predictive Control of Axial Dispersion Tubular Reactors\\ with Recycle: Addressing State-delay through Transport PDEs
 }
 
 
 \author{Behrad Moadeli and Stevan Dubljevic$^{1}$% <-this % stops a space
-\thanks{*Supported by the Natural Sciences and Engineering Research Council of Canada (NSERC).}% <-this % stops a space
 \thanks{$^{1}$Behrad Moadeli and Stevan Dubljevic are with the Department of Chemical and Materials Engineering,
-         University of Alberta, Edmonton, AB, Canada T6G 1H9
-        {\tt\small moadeli@ualberta.ca}, {\tt\small stevan.dubljevic@ualberta.ca}}%
+University of Alberta, Edmonton, AB, Canada T6G 1H9
+{\tt\small moadeli@ualberta.ca}, {\tt\small stevan.dubljevic@ualberta.ca}}%
+\thanks{Funding provided by the Natural Sciences and Engineering Research Council of Canada—NSERC (RGPIN-2022-03486).}% <-this % stops a space
 }
 
 
@@ -73,7 +73,7 @@ Model Predictive Control of Axial Dispersion Tubular Reactors\\ with Recycle: Ad
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
-        This paper presents the model predictive control of an axial tubular reactor with a recycle stream, where the intrinsic time delay imposed by the recycle stream—often overlooked in prior studies—is modeled as a transport PDE. This leads to a boundary-controlled system of coupled parabolic and hyperbolic PDEs under Danckwerts boundary conditions, ideal for this reactor type. A discrete-time linear model predictive controller is designed to stabilize the system. Utilizing Caley-Tustin time discretization along with the late lumping approach, the system's infinite-dimensional characteristics are preserved with no need for model reduction or spatial approximation. Numerical simulations demonstrate the controller’s effectiveness in stabilizing an unstable system while satisfying input constraints.
+        This paper presents the model predictive control of an axial tubular reactor with a recycle stream, where the intrinsic time delay imposed by the recycle stream—often overlooked in chemical engineering process control studies—is modeled as a transport PDE. This leads to a boundary-controlled system of coupled parabolic and hyperbolic PDEs under Danckwerts boundary conditions, specific for this reactor type. A discrete-time linear model predictive controller is designed to stabilize the system. Utilizing Caley-Tustin time discretization along with the late lumping approach, the system's infinite-dimensional characteristics are preserved with no need for model reduction or spatial approximation. Numerical simulations demonstrate the controller's effectiveness in stabilizing an unstable system while satisfying input constraints.
 
 \end{abstract}
 
