@@ -202,6 +202,54 @@ def B_d(zeta, s, par, u=1):
         
     return B_d * u
 
+def C_d(x, s, par):
+    """
+    Discrete-time C operator.
+    
+    Parameters:
+    ----------
+    x : np.ndarray
+        State array.
+    s : float
+        Laplace variable.
+    par : dict
+        Dictionary of system parameters.
+    
+    Returns:
+    -------
+    float
+        Scalar C_d(x).
+    """
+    import numpy as np
+    
+    CRx = Rs(x, s, par)[0,-1]
+    
+    return np.sqrt(2*s) * par['v'] * (1-par['R']) * CRx
+
+def D_d(x, s, par):
+    """
+    Discrete-time D operator.
+    
+    Parameters:
+    ----------
+    x : np.ndarray
+        State array.
+    s : float
+        Laplace variable.
+    par : dict
+        Dictionary of system parameters.
+    
+    Returns:
+    -------
+    float
+        scalar D_d.
+    """
+    import numpy as np
+    
+    RB = B_d(x, s, par) / np.sqrt(2*s)
+    
+    return par['v'] * (1-par['R']) * RB[0,-1]
+
 def Rs_adjoint(x, s, par):
     """
     Adjoint resolvent operator for the state x, Laplace variable s, parameters, and precomputed I and T arrays.
