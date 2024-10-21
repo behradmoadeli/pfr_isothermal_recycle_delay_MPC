@@ -226,7 +226,7 @@ def C_d(x, s, par):
     
     return np.sqrt(2*s) * par['v'] * (1-par['R']) * CRx
 
-def D_d(x, s, par):
+def D_d(zeta, s, par):
     """
     Discrete-time D operator.
     
@@ -246,7 +246,7 @@ def D_d(x, s, par):
     """
     import numpy as np
     
-    RB = B_d(x, s, par) / np.sqrt(2*s)
+    RB = B_d(zeta, s, par) / np.sqrt(2*s)
     
     return par['v'] * (1-par['R']) * RB[0,-1]
 
@@ -373,3 +373,59 @@ def Q_bar(x, par, lambdas, normal_coefs, q_ctrl, imag_tol=1e-8):
         return np.real(Q_vector)
     else:
         raise ValueError(f"The imaginary part for Q_bar is not negligible (max imaginary part: {np.max(np.abs(Q_vector.imag))})")
+
+def C_d_obs(x, s, par, L):
+    """
+    Discrete-time C operator for exo-system.
+    
+    Parameters:
+    ----------
+    x : np.ndarray
+        State array.
+    s : float
+        Laplace variable.
+    par : dict
+        Dictionary of system parameters.
+    L : np.ndarray
+        Observer gain.
+    
+    Returns:
+    -------
+    float
+        Scalar C_d_obs(x).
+    """
+        
+    coef = 1 + (s - par['k']) * L[0,-1] + par['v'] * (L[0,-1] - L[0,0])
+    
+    return C_d(x, s, par) / coef
+
+def D_d_obs(zeta, s, par, L):
+    """
+    Discrete-time D operator for exo-system.
+    
+    Parameters:
+    ----------
+    x : np.ndarray
+        State array.
+    s : float
+        Laplace variable.
+    par : dict
+        Dictionary of system parameters.
+    L : np.ndarray
+        Observer gain.
+    
+    Returns:
+    -------
+    float
+        scalar D_d.
+    """
+    
+    coef = 1 + (s - par['k']) * L[0,-1] + par['v'] * (L[0,-1] - L[0,0])
+    
+    return D_d(zeta, s, par) / coef
+
+def M_d_obs():
+    pass
+
+def L_d():
+    pass
