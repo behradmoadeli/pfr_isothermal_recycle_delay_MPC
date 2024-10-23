@@ -399,33 +399,73 @@ def C_d_obs(x, s, par, L):
     
     return C_d(x, s, par) / coef
 
-def D_d_obs(zeta, s, par, L):
+def D_d_obs(L, s, par):
     """
     Discrete-time D operator for exo-system.
     
     Parameters:
     ----------
-    x : np.ndarray
-        State array.
+    L : np.ndarray
+        Observer gain as a function of space.
     s : float
         Laplace variable.
     par : dict
         Dictionary of system parameters.
-    L : np.ndarray
-        Observer gain.
     
     Returns:
     -------
     float
-        scalar D_d.
+        scalar D_d_obs.
     """
+    
+    import numpy as np
+    zeta = np.linspace(0,1,len(L[0]))
     
     coef = 1 + (s - par['k']) * L[0,-1] + par['v'] * (L[0,-1] - L[0,0])
     
     return D_d(zeta, s, par) / coef
 
-def M_d_obs():
-    pass
+def M_d_obs(L, s, par):
+    """
+    Discrete-time M operator for exo-system.
+    
+    Parameters:
+    ----------
+    L : np.ndarray
+        Observer gain as a function of space.
+    s : float
+        Laplace variable.
+    par : dict
+        Dictionary of system parameters.
+    
+    Returns:
+    -------
+    float
+        scalar M_d_obs.
+    """
+    
+    CRL = Rs(L, s, par)[0,-1]
+    
+    return CRL / (1 + CRL)
 
-def L_d():
-    pass
+def L_d(L, s, par):
+    """
+    Discrete-time observer gain.
+    
+    Parameters:
+    ----------
+    L : np.ndarray
+        Observer gain as a function of space.
+    s : float
+        Laplace variable.
+    par : dict
+        Dictionary of system parameters.
+    
+    Returns:
+    -------
+    float
+        L_d discrete observer gain as a function of space.
+    """
+    import numpy as np
+    
+    return np.sqrt(2*s) * Rs(L, s, par)
