@@ -34,14 +34,19 @@ def MPC_matrix_build(
     N_ctrb = int(np.ceil(s/2/par['v']+1))
     S_ctrb = S[N_ctrb:,:].copy()
     T_ctrb = T[N_ctrb:].copy()
-    
+
+    U_min = u_min*np.ones((N,1)) #- 1e-6
+    # U_min[2:] *= 2
+    U_max = -u_max*np.ones((N,1)) #+ 1e-6
+    # U_max[2:] *= 2
+
     CT = np.vstack((S_u, -S_ctrb, S_ctrb, np.eye(N), -np.eye(N)))
     b = np.vstack((
             -np.array(T_u).reshape(-1,1),
             np.array(T_ctrb-y_max).reshape(-1,1), 
             np.array(y_min-T_ctrb).reshape(-1,1), 
-            u_min*np.ones((N,1)), 
-            -u_max*np.ones((N,1))
+            U_min, 
+            U_max
         )).reshape(-1,)
     
     if meq == 0:
