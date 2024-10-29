@@ -11,6 +11,17 @@
         "**/main.run.xml": true,
         "**/main.synctex.gz": true,
 
+        "**/root.aux": true,
+        "**/root.bbl": true,
+        "**/root.bcf": true,
+        "**/root.blg": true,
+        "**/root.fdb_latexmk": true,
+        "**/root.fls": true,
+        "**/root.log": true,
+        "**/root.out": true,
+        "**/root.run.xml": true,
+        "**/root.synctex.gz": true,
+
         "**/.*": true,
         "**/*.egg-info": true
     },

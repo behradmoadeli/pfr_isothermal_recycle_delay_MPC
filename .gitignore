@@ -13,3 +13,4 @@ functions/__pycache__/
 *.synctex.gz
 Paper/Final/*.zip
 paper/acc_manuscript/root.bbl
+paper/ecc_manuscript/sections/01_introduction.tex

@@ -44,6 +44,18 @@ S.~Dubljevic, N.~H. El-Farra, P.~Mhaskar, and P.~D. Christofides, ``Predictive c
 \bibitem{khatibi2021model}
 S.~Khatibi, G.~O. Cassol, and S.~Dubljevic, ``Model predictive control of a non-isothermal axial dispersion tubular reactor with recycle,'' \emph{Computers \& Chemical Engineering}, vol. 145, p. 107159, 2021.
 
+\bibitem{dochain2000state}
+D.~Dochain, ``State observers for tubular reactors with unknown kinetics,'' \emph{Journal of process control}, vol.~10, no. 2-3, pp. 259--268, 2000.
+
+\bibitem{dochain2001state}
+------, ``State observation and adaptive linearizing control for distributed parameter (bio) chemical reactors,'' \emph{International Journal of Adaptive Control and Signal Processing}, vol.~15, no.~6, pp. 633--653, 2001.
+
+\bibitem{alonso2004optimal}
+A.~A. Alonso, I.~G. Kevrekidis, J.~R. Banga, and C.~E. Frouzakis, ``Optimal sensor location and reduced order observer design for distributed process systems,'' \emph{Computers \& chemical engineering}, vol.~28, no. 1-2, pp. 27--35, 2004.
+
+\bibitem{ali2015review}
+J.~M. Ali, N.~H. Hoang, M.~A. Hussain, and D.~Dochain, ``Review and classification of recent observers applied in chemical process systems,'' \emph{Computers \& Chemical Engineering}, vol.~76, pp. 27--41, 2015.
+
 \bibitem{curtainbook}
 R.~Curtain and H.~Zwart, \emph{Introduction to infinite-dimensional systems theory: a state-space approach}.\hskip 1em plus 0.5em minus 0.4em\relax Springer Nature, 2020, vol.~71, ch. 3.2: `Riesz-spectral operators', pp. 79--108.
 
