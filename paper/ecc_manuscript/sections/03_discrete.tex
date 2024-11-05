@@ -1,0 +1,14 @@
+\section{Caley-Tustin Time Discretization}
+
+Having access to the resolvent operators of the original and the adjoint system, the Caley-Tustin time-discretization may be utilized to map the continuous-time setting to the discrete-time setting without losing crucial dynamical properties of the system, such as stability and controllability. This Crank-Nicolson type of discretization is also known as the lowest order symplectic integrator in Gauss quadrature-based Runge-Kutta methods \cite{hairer2006geometric}. Considering $\Delta t$ as the sampling time, and assuming a piecewise constant input within time intervals (a.k.a. zero-order hold), the discrete-time representation $\underline{x}(\zeta, k) = \mathfrak{A}_d \underline{x}(\zeta, k-1) + \mathfrak{B}_d u(k)$ is obtained, with discrete-time operators $\mathfrak{A}_d$ and $\mathfrak{B}_d$ defined in \eqref{eq:discrete_AB}, where $\alpha = 2/{\Delta t}$. As required for systems with nonself-adjoint generators, the adjoint discrete-time operators $\mathfrak{A}_d^*$ and $\mathfrak{B}_d^*$ are also obtained in a similar manner.
+
+\begin{equation} \label{eq:discrete_AB}
+    \begin{bmatrix}
+        \mathfrak{A}_d & \mathfrak{B}_d \\
+        \mathfrak{C}_d & \mathfrak{D}_d
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        -I + 2\alpha \mathfrak{R}(\alpha, \mathfrak{A}) & \sqrt{2\alpha} \mathfrak{R}(\alpha, \mathfrak{A}) \mathfrak{B}\\
+        \sqrt{2\alpha} \mathfrak{C} \mathfrak{R}(\alpha, \mathfrak{A}) & \mathfrak{C} \mathfrak{R}(\alpha, \mathfrak{A}) \mathfrak{B}
+    \end{bmatrix}
+\end{equation}

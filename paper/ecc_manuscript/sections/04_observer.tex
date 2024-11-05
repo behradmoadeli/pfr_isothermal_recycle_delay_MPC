@@ -1,0 +1,35 @@
+\section{Observer Design}
+
+One important issue of DPSs is the limitted access to the states of the infinite-dimensional system as the state is distributed over the entire domain and performing infinite measurements is never feasible. Therefore, an observer is required to estimate the states of the system based on the available measurements. To address this issue, a Luenberger observer is designed to reconstruct the states of the system based on the output measurements. First, the consinuous-time observer design is considered; followed by the design of the discrete-time observer.
+
+\subsection{Continuous-Time Observer Design}
+
+For the purpose of state recunstruction of a diffusion-convection-reaction system, where the feedforward term $\mathfrak{D}$ is generally absent, the continuous-time observer dynamics are given by \eqref{eq:observer_continuous}.
+
+\begin{equation} \label{eq:observer_continuous}
+    \begin{aligned}
+        \dot{\hat{x}}(\zeta, t) &= \mathfrak{A} \hat{x}(\zeta, t) + \mathfrak{B} u(t) + \mathfrak{L}_c [y(t) - \hat{y}(t)] \\
+        \hat{y}(t) &= \mathfrak{C} \hat{x}(\zeta, t)
+    \end{aligned}
+\end{equation}
+
+where $\hat{x}(\zeta, t)$ is the reconstructed state of the original system and $\mathfrak{L}_c$ is the continous-time observer gain. By subtracting the observer dynamics from the original system dynamics, the error dynamics $e(\zeta,t$) are obtained as shown in \eqref{eq:observer_error_continuous}.
+
+\begin{equation} \label{eq:observer_error_continuous}
+    \begin{aligned}
+        \dot{e}(\zeta, t) &= (\mathfrak{A} - \mathfrak{L}_c \mathfrak{C}) e(\zeta, t) = \mathfrak{A}_o e(\zeta,t) \\
+    \end{aligned}
+\end{equation}
+
+The goal is to design the observer gain $\mathfrak{L}_c$ such that the error dynamics are exponentially stable, i.e. $\max\{\operatorname{Re}(\lambda_{o})\}~<~0$ where $\lambda_{o}$ are the eigenvalues of the error dynamics matrix $\mathfrak{A}_o$. In Fig.~\ref{fig:L_vs_lambda}, three different forms of the observer gain are considered as spatial functions, with their effect on $\max\{\operatorname{Re}(\lambda_{o})\}$.
+
+\begin{figure}[!htbp]
+    \centering
+    \includesvg[inkscapelatex=false, width=0.42\textwidth, keepaspectratio]{figures/obs_lambda.svg}
+    \caption{Eigenvalues of operator $\mathfrak{A}$.}
+    \label{fig:L_vs_lambda}
+\end{figure}
+
+
+\subsection{Discrete-Time Observer Design}
+
