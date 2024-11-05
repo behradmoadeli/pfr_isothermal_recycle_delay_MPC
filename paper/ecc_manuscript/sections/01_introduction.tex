@@ -6,7 +6,7 @@ Early Lumping reduces the system to a finite-dimensional approximation through s
 However, this method can lead to inaccuracies due to mismatches between the reduced model and the original system dynamics \cite{moghadam2012infinite}. 
 Late Lumping, by contrast, preserves the system's infinite-dimensional structure until the final stages of controller implementation, resulting in a control approach that is more complex but achieves greater fidelity to the original dynamics.
 
-A range of studies in chemical engineering have applied the late lumping method to control infinite-dimensional systems, specifically targeting convection-reaction processes governed by first-order hyperbolic PDEs and diffusion-convection-reaction processes described by second-order parabolic PDEs. 
+A range of studies in chemical engineering have applied the late lumping method to control infinite-dimensional systems, specifically targeting convection-reaction processes governed by first-o                                          rder hyperbolic PDEs and diffusion-convection-reaction processes described by second-order parabolic PDEs. 
 In \cite{christofides1996feedback}, the robust control of first-order hyperbolic PDEs is explored, demonstrating the stabilization of a plug flow reactor system using a distributed input. 
 A boundary feedback stabilization approach using the backstepping method is presented in \cite{krstic2008backstepping} for a comparable system of first-order hyperbolic PDEs. 
 The work in \cite{xu2016state} introduces a state feedback regulator design for a countercurrent heat exchanger system, providing another example of a chemical engineering DPS governed by first-order hyperbolic PDEs, distinct from tubular reaction systems. 
@@ -24,12 +24,9 @@ Here, the state delay arises from the time taken for a stream to exit one pass o
 Similarly, in \cite{qi2021output}, a tubular reactor system is considered, where state delay is introduced by the recycle delay in the system, without accounting for the diffusion term along the reactor. 
 Even in \cite{khatibi2021model}, where a recycle stream is incorporated for a distributed diffusion-convection-reaction system, the recycle is assumed to be instantaneous—an assumption that creates a gap in the literature on diffusion-convection-reaction systems with recycle streams that impose state delay.
 
-
-
-In this work, an axial dispersion tubular reactor equipped with recycle is addressed as a diffusion-convection-reaction DPS. First, the reactor is modeled by a second order parabolic PDE, where the recycle stream poses a state delay, resulting in a first order hyperbolic transport PDE coupled with the original PDE. 
-
-Late lumping approach is utilized by obtaining the resolvent of the infinite-dimensional system in a closed operator form, with no need to perform spatial discretization. 
-
-Then, to enable the implementation of MPC as a digital controller, discrete-time representation of the system is obtained using Caley-Tustin time discretization technique; i.e. a Crank-Nicolson type of discretization that preserves the conservative characteristics of the continuous system, mitigating the need for model reduction \cite{havu2007cayley, xu2017linear}. 
-
-Finally via numerical simulations, the proposed controller is shown to stabilize an unstable system within an optimal framework, given input constraints.
+In this work, an axial dispersion tubular reactor equipped with recycle is addressed as a diffusion-convection-reaction DPS. First, the reactor is modeled by a second order parabolic PDE, where the recycle stream poses a state delay, resulting in a first order hyperbolic transport PDE. 
+Therefore, a system of coupled hyperbolic and parabolic PDEs is obtained to describe the infinite-dimensional model of the plant. 
+The resolvent operator of the system is then obtained in am exact closed form, omitting the need for spatial discretization following the late lumping approach. 
+The continous-time system is then discrtetized to enable the implementation of MPC as a digital controller. This is done using Caley-Tustin time discretization technique, i.e. a Crank-Nicolson type of discretization that preserves the conservative characteristics of the continuous system, mitigating the need for model reduction \cite{havu2007cayley, xu2017linear}. 
+An infinite-dimensional Luenberger observer is also designed to reconstruct the states of the system, addressing the controller's limited access to system's full-state. 
+As a result, through numerical simulations, the observer-based output feedback MPC is shown to successfully stabilize a system while adhering to input constraints, despite the original system being unstable.

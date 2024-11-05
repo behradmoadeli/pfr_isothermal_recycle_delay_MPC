@@ -2,7 +2,7 @@
 
 \subsection{Model representation}
 
-The chemical process depicted in Fig.~\ref{fig:reactor_scheme} illustrates a first-order irreversible chemical reaction within an axial dispersion tubular reactor \cite{levenspiel1998chemical}. The reactor features a recycle mechanism, allowing a portion of the product stream to re-enter the reactor, ensuring the consumption of any unreacted substrate. The reactor's dynamics can be described by a second-order parabolic PDE, a common class of equations used to characterize diffusion-convection-reaction systems \cite{jensen1982bifurcation}. The resulting PDE that describes the reactor model is given by \eqref{eq:PDE_original_model}, subject to the boundary conditions in \eqref{eq:BC}, obtained by utilizing first-principle modeling through relevant mass balance relations on an infinitesimally thin disk element along the longitudinal axis of the reactor.
+Fig.~\ref{fig:reactor_scheme} illustrates a chemical process, i.e. a first-order irreversible reaction within an axial dispersion tubular reactor \cite{levenspiel1998chemical}. The reactor is equipped with a recycle mechanism, allowing a portion of the product stream to re-enter the reactor, increasing the conversion of the substrate.  Utilizing first-principle modeling through relevant mass balance relations on an infinitesimally thin disk element along the longitudinal axis of the reactor, the dynamics describing the concentration within the system results in a second-order parabolic PDE, a common class of equations used to characterize diffusion-convection-reaction systems \cite{jensen1982bifurcation}. 
 
 \begin{figure}[!htbp] 
     \centering
@@ -30,6 +30,8 @@ The chemical process depicted in Fig.~\ref{fig:reactor_scheme} illustrates a fir
     % \pdfbookmark[2]{Figure: Reactor Scheme}{fig:reactor_scheme}
 \end{figure}
 
+In an attempt to make the model more realistic for common axial dispersion tubular reactors in chemical industry, Dankwerts boundary conditions are chosen as they are known to be suitable for this purpose by accounting for deviations from perfect mixing and piston flow, assuming negligible transport lags in connecting lines \cite{danckwerts1993continuous}. The delayed state resulting from the recycled portion of the flow, occurring $\tau$ seconds back in time, is applied at the inlet boundary condition. The governing equation is given by the PDE represented by \eqref{eq:PDE_original_model}, subject to the abovementioned boundary conditions in \eqref{eq:BC}.
+
 \begin{equation} \label{eq:PDE_original_model}
     \dot{c}(\zeta, t) = D \partial_{\zeta \zeta} c(\zeta, t) - v \partial_\zeta c(\zeta, t) + k_r c(\zeta, t)
 \end{equation}
@@ -44,9 +46,8 @@ The chemical process depicted in Fig.~\ref{fig:reactor_scheme} illustrates a fir
 
 Here, $c(\zeta, t)$ is the concentration of the product along the reactor, representing the state of the system. The physical parameters $D$, $v$, $k_r$, $R$, and $\tau$ represent the diffusion coefficient, flow velocity along the reactor, reaction constant, recycle ratio, and residence time of the recycle flow, respectively. The coordinate system in space and time is represented by $\zeta$ and $t$, where $\zeta \in [0, 1]$ and $t \in [0, \infty)$.
 
-In an attempt to make the model more realistic for common axial dispersion tubular reactors in chemical industry, Dankwerts boundary conditions are chosen as they are known to be suitable for this purpose by accounting for deviations from perfect mixing and piston flow, assuming negligible transport lags in connecting lines \cite{danckwerts1993continuous}. The delayed state resulting from the recycled portion of the flow, occurring $\tau$ seconds back in time, is applied at the inlet boundary condition, as shown in \eqref{eq:BC}.
-
-In the case where the problem involves similar forms of PDEs, an effective general practice to address delays in systems is to reformulate the problem such that the notion of delay is replaced with an alternative transport PDE. Therefore, a new state variable $\underline{x}(\zeta, t) \equiv [x_1(\zeta, t), x_2(\zeta, t)]^T$ is defined as a vector of functions, where $x_1(\zeta, t)$ represents the concentration within the reactor—analogous to $c(\zeta,t)$—and $x_2(\zeta, t)$ is introduced as a new state variable to account for the concentration along the recycle stream. The delay is thus modeled as a pure transport process, wherein the first state $x_1(\zeta, t)$ is transported from the reactor outlet to the inlet, experiencing a delay of $\tau$ time units while in the recycle stream. This makes all state variables expressed explicitly at a specific time instance $t$, resulting in the standard state-space form for a given infinite-dimensional linear time-invariant (LTI) system $\dot{\underline{x}} = \mathfrak{A} \underline{x} + \mathfrak{B} u$. Here, $\mathfrak{A}$ is a linear operator $\mathcal{L}(X)$ acting on a Hilbert space $X: L^2[0,1] \times L^2[0,1]$ and $\underline{x}(\zeta,t)$, as defined previously, is the vector of functions describing the states of the system. The operator $\mathfrak{A}$ and its domain are defined in detail as shown in \eqref{eq:operator_A}. Also, $\mathfrak{B}$ is a linear operator that maps the scalar input from input-space onto the state space, as defined in \eqref{eq:operator_B}.
+An interesting approach to address delays where the problem involves other forms of PDEs is to reformulate the problem such that the notion of delay is replaced with an alternative transport PDE \cite{krstic2009book}. 
+Therefore, the state variable $c(\zeta,t)$ is replaced with a new state variable $\underline{x}(\zeta, t) \equiv [x_1(\zeta, t), x_2(\zeta, t)]^T$ as a vector of functions, where $x_1(\zeta, t)$ represents the concentration within the reactor—analogous to $c(\zeta,t)$—and $x_2(\zeta, t)$ is the new state variable for the concentration along the recycle stream. The delay is thus modeled as a pure transport process rather than being present in the argument of the state at the boundary—i.e. $c(1,t-\tau)$— making all state variables expressed explicitly at a specific time instance $t$, resulting in the standard state-space form for a given infinite-dimensional linear time-invariant (LTI) system $\dot{\underline{x}} = \mathfrak{A} \underline{x} + \mathfrak{B} u$. Here, $\mathfrak{A}$ is a linear operator $\mathcal{L}(X)$ acting on a Hilbert space $X: L^2[0,1] \times L^2[0,1]$ and $\underline{x}(\zeta,t)$, as defined previously, is the vector of functions describing the states of the system. The operator $\mathfrak{A}$ and its domain are defined in detail as shown in \eqref{eq:operator_A}. Also, $\mathfrak{B}$ is a linear operator that maps the scalar input from input-space onto the state space, as defined in \eqref{eq:operator_B}.
 
 \begin{equation} \label{eq:operator_A}
     \begin{aligned}
@@ -55,7 +56,7 @@ In the case where the problem involves similar forms of PDEs, an effective gener
             D \partial_{\zeta \zeta} - v \partial_\zeta + k_r & 0 \\
             0 & \frac{1}{\tau} \partial_\zeta
         \end{bmatrix}\\
-        D(\mathfrak{A}) =& \Bigl\{ \underline{x}(\zeta) = [x_1(\zeta), x_2(\zeta)]^T \in X:\\
+        \mathcal{D}(\mathfrak{A}) =& \Bigl\{ \underline{x}(\zeta) = [x_1(\zeta), x_2(\zeta)]^T \in X:\\
         &\underline{x}(\zeta), \partial_\zeta \underline{x}(\zeta), \partial_{\zeta \zeta} \underline{x}(\zeta) \quad \mathrm{a.c.},\\
         &D \partial_\zeta x_1(0) - v x_1(0) = -v R x_2(0),\\
         &\partial_\zeta x_1(1) = 0,
@@ -70,7 +71,7 @@ In the case where the problem involves similar forms of PDEs, an effective gener
             \delta(\zeta) \\
             0
         \end{bmatrix} v (1-R) \\
-        D(\mathfrak{B}) &= \Bigl\{ u \in \mathbb{R} \Bigr\}
+        \mathcal{D}(\mathfrak{B}) &= \Bigl\{ u \in \mathbb{R} \Bigr\}
     \end{aligned}
 \end{equation}
 
@@ -111,7 +112,7 @@ Next step is to obtain the adjoint system operators $\mathfrak{A}^*$ and $\mathf
             D \partial_{\zeta \zeta} + v \partial_\zeta +k_r & 0\\
             0 & -\frac{1}{\tau} \partial_\zeta
         \end{bmatrix}\\
-        D(\mathfrak{A}^*) =& \Bigl\{ \underline{y} = [y_1, y_2]^T \in Y:\\
+        \mathcal{D}(\mathfrak{A}^*) =& \Bigl\{ \underline{y} = [y_1, y_2]^T \in Y:\\
         &\underline{y}(\zeta), \partial_\zeta \underline{y}(\zeta), \partial_{\zeta \zeta} \underline{y}(\zeta) \quad \mathrm{a.c.},\\
         &D \partial_\zeta y_1(1) + v y_1(1) = \frac{1}{\tau} y_2(1), \\
         &R v y_1(0) = \frac{1}{\tau} y_2(0), 
