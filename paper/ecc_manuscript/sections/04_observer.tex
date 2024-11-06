@@ -8,12 +8,12 @@ For the purpose of state recunstruction of a diffusion-convection-reaction syste
 
 \begin{equation} \label{eq:observer_continuous}
     \begin{aligned}
-        \dot{\hat{x}}(\zeta, t) &= \mathfrak{A} \hat{x}(\zeta, t) + \mathfrak{B} u(t) + \mathfrak{L}_c [y(t) - \hat{y}(t)] \\
-        \hat{y}(t) &= \mathfrak{C} \hat{x}(\zeta, t)
+        \dot{\underline{\hat{x}}}(\zeta, t) &= \mathfrak{A} \underline{\hat{x}}(\zeta, t) + \mathfrak{B} u(t) + \mathfrak{L}_c [y(t) - \hat{y}(t)] \\
+        \hat{y}(t) &= \mathfrak{C} \underline{\hat{x}}(\zeta, t)
     \end{aligned}
 \end{equation}
 
-where $\hat{x}(\zeta, t)$ is the reconstructed state of the original system and $\mathfrak{L}_c$ is the continuous-time observer gain. By subtracting the observer dynamics from the original system dynamics, the error dynamics $e(\zeta,t$) are obtained as shown in \eqref{eq:observer_error_continuous}.
+where $\underline{\hat{x}}(\zeta, t)$ is the reconstructed state of the original system and $\mathfrak{L}_c$ is the continuous-time observer gain. By subtracting the observer dynamics from the original system dynamics, the error dynamics $e(\zeta,t$) are obtained as shown in \eqref{eq:observer_error_continuous}.
 
 \begin{equation} \label{eq:observer_error_continuous}
     \begin{aligned}
@@ -37,8 +37,8 @@ Once an appropriate continuous-time observer gain is determined, the discrete-ti
 
 \begin{equation} \label{eq:observer_discrete}
     \begin{aligned}
-        \hat{x}(\zeta, k) &= \mathfrak{A}_d \hat{x}(\zeta, k-1) + \mathfrak{B}_d u(k) + \mathfrak{L}_d [y(k) - \hat{y}(k)] \\
-        \hat{y}(k) &= \mathfrak{C}_{d,o} \hat{x}(\zeta, k-1) + \mathfrak{D}_{d,o} u(k) + \mathfrak{M}_{d,o} y(k)
+        \underline{\hat{x}}(\zeta, k) &= \mathfrak{A}_d \underline{\hat{x}}(\zeta, k-1) + \mathfrak{B}_d u(k) + \mathfrak{L}_d [y(k) - \hat{y}(k)] \\
+        \hat{y}(k) &= \mathfrak{C}_{d,o} \underline{\hat{x}}(\zeta, k-1) + \mathfrak{D}_{d,o} u(k) + \mathfrak{M}_{d,o} y(k)
     \end{aligned}
 \end{equation}
 

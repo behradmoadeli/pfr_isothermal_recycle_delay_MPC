@@ -1,26 +1,30 @@
 \section{Model Predictive Controller Design}
 
-The proposed MPC, as shown in Fig.~\ref{fig:block_diagram}, is developed in this section with the goal of stabilizing the given unstable infinite-dimensional system within an optimal framework while satisfying input constraints. An infinite-time open-loop objective function sets the foundation of the controller design in the discrete-time setting at each sampling instant $k$, which consists of a weighted sum of state deviations and actuation costs for all future time instances, subject to the system dynamics and input constraints, as shown in \eqref{eq:MPC_inf_time}.
+In this section, the observer-based MPC shown in Fig.~\ref{fig:block_diagram} is developed with the goal of stabilizing the given unstable infinite-dimensional system within an optimal framework, relying solely on output measurements while satisfying input constraints. 
+An infinite-time open-loop objective function sets the foundation of the controller design in the discrete-time setting at each sampling instant $k$, which consists of a weighted sum of state deviations and actuation costs for all future time instances, subject to the system dynamics and input constraints, as shown in \eqref{eq:MPC_inf_time}.
 
 \begin{figure}[!htbp]
     \centering
     \begin{tikzpicture}[node distance=2cm, scale=0.75, transform shape]
-        \node (plant) [block] {Plant};
-        \node (MPC) [block, below of=plant] {MPC};
-        \draw [arrow] (plant.south) -- node[midway, right] {$\underline{x}(\zeta,k)$} (MPC.north);
-        \draw [arrow] (MPC.west) -- ++(-1,0) |- node[near end, above] {$u(k)$} (plant.west);
-        \draw [arrow] (plant.east) -- node[midway, above] {$y(k)$} ++(1,0);
+        \node (plant) [block, minimum width=3cm] {Plant};
+        \node (regulator) [block, below of=plant, xshift=-1cm, yshift=-1cm] {MPC};
+        \node (observer) [block, below of=plant, xshift=1cm, yshift=0.5cm] {Observer};
+        \draw [arrow] (plant.east) -- node[midway, above] {$y(k)$} ++(2,0);
+        \draw [arrow] (plant.east) ++(1,0) |- (observer.east);
+        \draw [arrow] (observer.south) -- ++(0,-1) node[midway, right] {$\hat{{x}}(\zeta,k)$} -- (regulator.east);    
+        \draw [arrow] (regulator.west) -- ++(-1,0) |- (plant.west);
+        \draw [arrow] (regulator.west) ++(-1,1.5) coordinate(start) -- node[near start, left, xshift=-0.75cm] {$u(k)$} (observer.west);
     \end{tikzpicture}
-    \caption{Proposed full-state feedback model predictive control system.}
+    \caption{Block diagram representation of the observer-based MPC.}
     \label{fig:block_diagram}
 \end{figure}
 
 \begin{equation} \label{eq:MPC_inf_time}
     \begin{aligned}
-        \min_{U} \quad \sum_{l=0}^{\infty} &\langle \underline{x}(\zeta, k+l | k), \mathfrak{Q} \underline{x}(\zeta, k+l | k) \rangle \\
+        \min_{U} \quad \sum_{l=0}^{\infty} &\langle \underline{\hat{x}}(\zeta, k+l | k), \mathfrak{Q} \underline{\hat{x}}(\zeta, k+l | k) \rangle \\
         + &\langle u(k+l+1 | k), \mathfrak{F} u(k+l+1|k) \rangle \\
         \, \\
-        \text{s.t.} \quad &\underline{x}(\zeta, k+l | k) = \mathfrak{A}_d \underline{x}(\zeta, k+l-1 | k) + \mathfrak{B}_d u(k+l | k) \\
+        \text{s.t.} \quad &\underline{\hat{x}}(\zeta, k+l | k) = \mathfrak{A}_d \underline{\hat{x}}(\zeta, k+l-1 | k) + \mathfrak{B}_d u(k+l | k) \\
         &u^{min} \leq u(k+l | k) \leq u^{max}
     \end{aligned}
 \end{equation}
@@ -29,17 +33,17 @@ where $\mathfrak{Q}$ and $\mathfrak{F}$ are positive definite operators of appro
 
 \begin{equation} \label{eq:MPC_finite_time}
     \begin{aligned}
-        \min_{U} \quad \sum_{l=0}^{N-1} &\langle \underline{x}(\zeta, k+l | k), \mathfrak{Q} \underline{x}(\zeta, k+l | k) \rangle \\
+        \min_{U} \quad \sum_{l=0}^{N-1} &\langle \underline{\hat{x}}(\zeta, k+l | k), \mathfrak{Q} \underline{\hat{x}}(\zeta, k+l | k) \rangle \\
         + &\langle u(k+l+1 | k), \mathfrak{F} u(k+l+1|k) \rangle \\
-        + &\langle \underline{x}(\zeta, k+N | k), \mathfrak{P} \underline{x}(\zeta, k+N | k) \rangle \\
+        + &\langle \underline{\hat{x}}(\zeta, k+N | k), \mathfrak{P} \underline{\hat{x}}(\zeta, k+N | k) \rangle \\
         \, \\
-        \text{s.t.} \quad &\underline{x}(\zeta, k+l | k) = \mathfrak{A}_d \underline{x}(\zeta, k+l-1 | k) + \mathfrak{B}_d u(k+l | k) \\
+        \text{s.t.} \quad &\underline{\hat{x}}(\zeta, k+l | k) = \mathfrak{A}_d \underline{\hat{x}}(\zeta, k+l-1 | k) + \mathfrak{B}_d u(k+l | k) \\
         &u^{min} \leq u(k+l | k) \leq u^{max} \\
-        & \langle \underline{x}(\zeta, k+N | k), \underline{\phi_u}(\zeta) \rangle = 0
+        & \langle \underline{\hat{x}}(\zeta, k+N | k), \underline{\phi_u}(\zeta) \rangle = 0
     \end{aligned}
 \end{equation}
 
-Obtained as the solution to the discrete-time Lyapunov equation, $\mathfrak{P}$ is the terminal cost operator as shown in \eqref{eq:terminal_cost}; which can be proven to be positive definite only if the terminal state $\underline{x}(\zeta, k+N | k)$ is in a stable subspace. Therefore, an equality constraint is introduced to guarantee that the resulting quadratic optimization problem is convex. The terminal constraint is enforced by setting the projection of the terminal state onto the unstable subspace of the system to zero \cite{curtainbook, xu2017linear, khatibi2021model}. Here, $\underline{\phi_u}(\zeta)$ is the set of unstable eigenfunctions of the system, for all eigenvalues where $\operatorname{Re}(\lambda_u) \geq 0$.
+Obtained as the solution to the discrete-time Lyapunov equation, $\mathfrak{P}$ is the terminal cost operator as shown in \eqref{eq:terminal_cost}; which can be proven to be positive definite only if the terminal state $\underline{\hat{x}}(\zeta, k+N | k)$ is in a stable subspace. Therefore, an equality constraint is introduced to guarantee that the resulting quadratic optimization problem is convex. The terminal constraint is enforced by setting the projection of the terminal state onto the unstable subspace of the system to zero \cite{curtainbook, xu2017linear, khatibi2021model}. Here, $\underline{\phi_u}(\zeta)$ is the set of unstable eigenfunctions of the system, for all eigenvalues where $\operatorname{Re}(\lambda_u) \geq 0$.
 
 \begin{equation} \label{eq:terminal_cost}
     \mathfrak{P} (\cdot) = \sum_{m=0}^{\infty} \sum_{n=0}^{\infty} 
@@ -55,9 +59,9 @@ One may further process the optimization problem in \eqref{eq:MPC_finite_time} t
 
 \begin{equation} \label{eq:MPC_QP}
     \begin{aligned}
-        \min_{U} &J = U^T \langle I,H \rangle U + 2U^T \langle I, P \underline{x}(\zeta, k|k) \rangle \\
+        \min_{U} &J = U^T \langle I,H \rangle U + 2U^T \langle I, P \underline{\hat{x}}(\zeta, k|k) \rangle \\
         \text{s.t.} &\qquad U^{min} \leq U \leq U^{max} \\
-        &\qquad T_u \underline{x}(\zeta, k|k) + S_u U = 0
+        &\qquad T_u \underline{\hat{x}}(\zeta, k|k) + S_u U = 0
         \, \\
         \text{with } &H = \\
         &\hspace{-3.5em }\begin{bmatrix}
