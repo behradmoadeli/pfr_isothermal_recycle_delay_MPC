@@ -13,23 +13,44 @@ For the purpose of state recunstruction of a diffusion-convection-reaction syste
     \end{aligned}
 \end{equation}
 
-where $\hat{x}(\zeta, t)$ is the reconstructed state of the original system and $\mathfrak{L}_c$ is the continous-time observer gain. By subtracting the observer dynamics from the original system dynamics, the error dynamics $e(\zeta,t$) are obtained as shown in \eqref{eq:observer_error_continuous}.
+where $\hat{x}(\zeta, t)$ is the reconstructed state of the original system and $\mathfrak{L}_c$ is the continuous-time observer gain. By subtracting the observer dynamics from the original system dynamics, the error dynamics $e(\zeta,t$) are obtained as shown in \eqref{eq:observer_error_continuous}.
 
 \begin{equation} \label{eq:observer_error_continuous}
     \begin{aligned}
-        \dot{e}(\zeta, t) &= (\mathfrak{A} - \mathfrak{L}_c \mathfrak{C}) e(\zeta, t) = \mathfrak{A}_o e(\zeta,t) \\
+        \dot{e}(\zeta, t) &= (\mathfrak{A} - \mathfrak{L}_c \mathfrak{C}) e(\zeta, t) \equiv \mathfrak{A}_o e(\zeta,t) \\
     \end{aligned}
 \end{equation}
 
-The goal is to design the observer gain $\mathfrak{L}_c$ such that the error dynamics are exponentially stable, i.e. $\max\{\operatorname{Re}(\lambda_{o})\}~<~0$ where $\lambda_{o}$ are the eigenvalues of the error dynamics matrix $\mathfrak{A}_o$. In Fig.~\ref{fig:L_vs_lambda}, three different forms of the observer gain are considered as spatial functions, with their effect on $\max\{\operatorname{Re}(\lambda_{o})\}$.
+The goal is to design the observer gain $\mathfrak{L}_c$ such that the error dynamics are exponentially stable, i.e. $\max\{\operatorname{Re}(\lambda_{o})\}~<~0$ where $\lambda_{o}$ are the eigenvalues of the error dynamics matrix $\mathfrak{A}_o$. Three different forms of the observer gain are considered as spatial functions $\mathfrak{L}_c = f(\zeta, l_{obs})$ with the effect of the scalar coefficient $l_{obs}$ on $\max\{\operatorname{Re}(\lambda_{o})\}$ shown in Fig.~\ref{fig:L_vs_lambda}.
 
 \begin{figure}[!htbp]
     \centering
     \includesvg[inkscapelatex=false, width=0.42\textwidth, keepaspectratio]{figures/obs_lambda.svg}
-    \caption{Eigenvalues of operator $\mathfrak{A}$.}
+    \caption{The effect of various observer gains $\mathfrak{L}_c = f(\zeta, l_{obs})$ on the eigenvalues of state reconstruction error dynamics $\lambda_o$.}
     \label{fig:L_vs_lambda}
 \end{figure}
 
 
 \subsection{Discrete-Time Observer Design}
 
+Once an appropriate continuous-time observer gain is determined, the discrete-time observer gain $\mathfrak{L}_d$ may be obtained using the same Caley-Tustin time discretization approach, as shown in \eqref{eq:observer_discrete}.
+
+\begin{equation} \label{eq:observer_discrete}
+    \begin{aligned}
+        \hat{x}(\zeta, k) &= \mathfrak{A}_d \hat{x}(\zeta, k-1) + \mathfrak{B}_d u(k) + \mathfrak{L}_d [y(k) - \hat{y}(k)] \\
+        \hat{y}(k) &= \mathfrak{C}_{d,o} \hat{x}(\zeta, k-1) + \mathfrak{D}_{d,o} u(k) + \mathfrak{M}_{d,o} y(k)
+    \end{aligned}
+\end{equation}
+
+with $\mathfrak{A}_d$ and $\mathfrak{B}_d$ defined in \eqref{eq:discrete_AB}, and $\mathfrak{C}_{d,o}$, $\mathfrak{D}_{d,o}$, $\mathfrak{M}_{d,o}$, and $\mathfrak{L}_d$ are given in \eqref{eq:observer_discrete_CDLM}.
+
+\begin{equation} \label{eq:observer_discrete_CDLM}
+    \begin{aligned}
+        \mathfrak{C}_{d,o} (\cdot) &= \sqrt{2\alpha} \left[ I + \mathfrak{C} (\alpha I - \mathfrak{A}) \mathfrak{L}_c \right]^{-1} \mathfrak{C} \mathfrak{R}(\alpha, \mathfrak{A}) (\cdot) \\
+        \mathfrak{D}_{d,o} &= \left[ I + \mathfrak{C} (\alpha I - \mathfrak{A}) \mathfrak{L}_c \right]^{-1} \mathfrak{C} \mathfrak{R}(\alpha, \mathfrak{A}) \mathfrak{B} \\
+        \mathfrak{M}_{d,o} &= \left[ I + \mathfrak{C} (\alpha I - \mathfrak{A}) \mathfrak{L}_c \right]^{-1} \mathfrak{C} \mathfrak{R}(\alpha, \mathfrak{A}) \mathfrak{L}_c \\
+        \mathfrak{L}_d &= \sqrt{2\alpha} \mathfrak{R}(\alpha, \mathfrak{A}) \mathfrak{L}_c \\
+    \end{aligned}
+\end{equation}
+
+It has been proven that using this approach, the discrete-time error dynamics will be stable if the continuous-time observer gain $\mathfrak{L}_c$ is chosen such that $\mathfrak{A}_o$ is stable. It is worth noting that the methodology presented skips the need for model reduction associated with the discrete-time Luenberger observer, with no spatial approximation required as well \cite{dochain2000state,dochain2001state,alonso2004optimal,ali2015review,khatibi2021model}.
