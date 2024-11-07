@@ -1,28 +1,30 @@
 \section{Results and Discussion}
 
-Numerical simulations for the open-loop system and the closed-loop system under the proposed MPC are presented in this section, with parameters chosen according to Table~\ref{tab:pars}. As the eigenvalue distribution obtained in Fig(\ref{fig:eigval_dist}) suggests, the open-loop system is unstable due to the presence of an eigenvalue with positive real part. The zero-input response of the system is shown in Fig(\ref{fig:openloop_response}) where the initial condition for the reactor is set to $c(\zeta,0) = \sin^2(\pi \zeta)$. The recycle stream is assumed to be empty at the beginning of the simulation.
+Numerical simulations for the closed-loop system under the proposed observer-based output feedback MPC is presented in this section, with parameters chosen according to Table~\ref{tab:pars}. As the eigenvalue distribution obtained in Fig(\ref{fig:eigval_dist}) suggests, the open-loop system is unstable due to the presence of an eigenvalue with positive real part. 
 
-An infinite-dimensional MPC is designed and applied to the unstable system. The state deviation and actuation penalty terms are set as $\mathfrak{Q} = 0.04 I$ and $\mathfrak{F} = 27$. The sampling time and the horizon length for the MPC are set to $\Delta t = 20$ s and $N = 9$, respectively. Lastly, the input constraints are assumed to be $0 \leq u(t) \leq 0.15$. The closed-loop response of the system is shown in Fig(\ref{fig:closedloop_response}) and the control input as well as the system output is shown in Fig(\ref{fig:control_input}). It may be confirmed that the MPC successfully stabilizes the unstable system while satisfying the input constraints.
+An infinite-dimensional MPC is designed and applied to the system with the initial condition for the reactor set to $c(\zeta,0) = \sin^2(\pi \zeta)$. The recycle stream is assumed to be empty at the beginning of the simulation. The state deviation and actuation penalty terms are set as $\mathfrak{Q} = 0.04 I$ and $\mathfrak{F} = 27$. The sampling time and the horizon length for the MPC are set to $\Delta t = 20$ s and $N = 9$, respectively, while the input constraints are assumed to be $0 \leq u(t) \leq 0.15$. The initial condition for estimated states are assumed to be zero all over the domain. Lastly, the observer gain is set as a constant function $\mathfrak{L}_c = 1$. 
 
-\begin{figure}[!htbp]
-    \centering
-    \includesvg[inkscapelatex=false, width=0.45\textwidth, keepaspectratio]{Figures/observation_error.svg}
-    \caption{Open-loop concentration profile along the reactor.}
-    \label{fig:openloop_response}
-\end{figure}
+The closed-loop response of the system is shown in Fig(\ref{fig:closedloop_response}) and the control input as well as the system output is shown in Fig(\ref{fig:control_input}). State reconstruction error dynamics of the proposed Luenberger observer is also shown in Fig(\ref{fig:observation_error}). According to the results, it can be confirmed that the observer-based MPC successfully stabilizes the unstable system using solely output measurements while satisfying the input constraints.
 
 \begin{figure}[!htbp]
     \centering
-    \includesvg[inkscapelatex=false, width=0.45\textwidth, keepaspectratio]{Figures/closedloop_response.svg}
+    \includesvg[inkscapelatex=false, width=0.4\textwidth, keepaspectratio]{Figures/closedloop_response.svg}
     \caption{Stabilized reactor concentration profile under the proposed MPC.}
     \label{fig:closedloop_response}
 \end{figure}
 
 \begin{figure}[!htbp]
     \centering
-    \includesvg[inkscapelatex=false, width=0.45\textwidth, keepaspectratio]{Figures/input.svg}
+    \includesvg[inkscapelatex=false, width=0.4\textwidth, keepaspectratio]{Figures/input.svg}
     \caption{Input constraints, the obtained input profile, and the reactor output under the proposed MPC.}
     \label{fig:control_input}
 \end{figure}
 
-One interesting aspect of considering recycle stream is the oscillatory behavior of the system dynamics. While axial dispersion reactors show no oscillation in the absence of recycle, the nature of recycle streams can introduce such behavior. The choice of control horizon is another key factor. A short control horizon relative to the resident time of the recycle stream can lead to oscillatory input profiles due to the presence of delayed recycle stream. In this example, the control horizon, i.e. $180$ s, is set to be considerably longer than the recycle delay, which is $80$ s; resulting in a non-oscillatory input profile.
+\begin{figure}[!htbp]
+    \centering
+    \includesvg[inkscapelatex=false, width=0.4\textwidth, keepaspectratio]{Figures/observation_error.svg}
+    \caption{State reconstruction error profile of the proposed Luenberger observer along the reactor.}
+    \label{fig:observation_error}
+\end{figure}
+
+One important aspect of the proposed observer-based controller is to confirm how the state reconstruction error dynamics stabilize faster compared to the closed-loop system dynamics. This will avoid unwanted oscillations that will affect the performance of the controller due to poor state estimations. In addition, oscillations may arise in the system dynamics due to the presence of the recycle stream. While the axial dispersion reactors show no oscillation in the absence of recycle, the nature of recycle streams introduces such behavior in either the open-loop system or a closed-loop system where the control horizon is short relative to the state-delay imposed by the recycle stream. In this example, the control horizon, i.e. $180$ s, is set to be considerably longer than the recycle delay, which is $80$ s; resulting in a non-oscillatory input profile as the model-based controller is able to capture the effect of the recycle stream on the system dynamics.

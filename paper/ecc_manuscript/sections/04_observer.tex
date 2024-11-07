@@ -1,10 +1,10 @@
 \section{Observer Design}
 
-One important issue of DPSs is the limitted access to the states of the infinite-dimensional system as the state is distributed over the entire domain and performing infinite measurements is never feasible. Therefore, an observer is required to estimate the states of the system based on the available measurements. To address this issue, a Luenberger observer is designed to reconstruct the states of the system based on the output measurements. First, the consinuous-time observer design is considered; followed by the design of the discrete-time observer.
+One important issue of DPSs is the limited access to the states of the infinite-dimensional system as the state is distributed over the entire domain and performing infinite measurements is never feasible. Therefore, an observer is required to estimate the states of the system based on the available measurements. To address this issue, a Luenberger observer is designed to reconstruct the states of the system based on the output measurements. First, the continuous-time observer design is considered; followed by the design of the discrete-time observer.
 
 \subsection{Continuous-Time Observer Design}
 
-For the purpose of state recunstruction of a diffusion-convection-reaction system, where the feedforward term $\mathfrak{D}$ is generally absent, the continuous-time observer dynamics are given by \eqref{eq:observer_continuous}.
+For the purpose of state reconstruction of a diffusion-convection-reaction system, where the feedforward term $\mathfrak{D}$ is generally absent, the continuous-time observer dynamics are given by \eqref{eq:observer_continuous}.
 
 \begin{equation} \label{eq:observer_continuous}
     \begin{aligned}
@@ -25,11 +25,10 @@ The goal is to design the observer gain $\mathfrak{L}_c$ such that the error dyn
 
 \begin{figure}[!htbp]
     \centering
-    \includesvg[inkscapelatex=false, width=0.42\textwidth, keepaspectratio]{figures/obs_lambda.svg}
+    \includesvg[inkscapelatex=false, width=0.38\textwidth, keepaspectratio]{figures/obs_lambda.svg}
     \caption{The effect of various observer gains $\mathfrak{L}_c = f(\zeta, l_{obs})$ on the eigenvalues of state reconstruction error dynamics $\lambda_o$.}
     \label{fig:L_vs_lambda}
 \end{figure}
-
 
 \subsection{Discrete-Time Observer Design}
 

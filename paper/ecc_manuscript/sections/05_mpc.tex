@@ -5,7 +5,7 @@ An infinite-time open-loop objective function sets the foundation of the control
 
 \begin{figure}[!htbp]
     \centering
-    \begin{tikzpicture}[node distance=2cm, scale=0.75, transform shape]
+    \begin{tikzpicture}[node distance=2cm, scale=0.7, transform shape]
         \node (plant) [block, minimum width=3cm] {Plant};
         \node (regulator) [block, below of=plant, xshift=-1cm, yshift=-1cm] {MPC};
         \node (observer) [block, below of=plant, xshift=1cm, yshift=0.5cm] {Observer};

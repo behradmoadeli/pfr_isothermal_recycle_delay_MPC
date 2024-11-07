@@ -28,7 +28,7 @@ Fig.~\ref{fig:reactor_scheme} illustrates a chemical process, i.e. a first-order
     % \pdfbookmark[2]{Figure: Reactor Scheme}{fig:reactor_scheme}
 \end{figure}
 
-In an attempt to make the model more realistic for common axial dispersion tubular reactors in chemical industry, Dankwerts boundary conditions are chosen as they are known to be suitable for this purpose by accounting for deviations from perfect mixing and piston flow, assuming negligible transport lags in connecting lines \cite{danckwerts1993continuous}. The delayed state resulting from the recycled portion of the flow, occurring $\tau$ seconds back in time, is applied at the inlet boundary condition. The governing equation is given by the PDE represented by \eqref{eq:PDE_original_model}, subject to the abovementioned boundary conditions in \eqref{eq:BC}.
+In an attempt to make the model more realistic for common axial dispersion tubular reactors in chemical industry, Dankwerts boundary conditions are chosen as they are known to be suitable for this purpose by accounting for deviations from perfect mixing and piston flow, assuming negligible transport lags in connecting lines \cite{danckwerts1993continuous}. The delayed state resulting from the recycled portion of the flow, occurring $\tau$ seconds back in time, is applied at the inlet boundary condition. The governing equation is given by the PDE represented by \eqref{eq:PDE_original_model}, subject to the aforementioned boundary conditions in \eqref{eq:BC}.
 
 \begin{equation} \label{eq:PDE_original_model}
     \dot{c}(\zeta, t) = D \partial_{\zeta \zeta} c(\zeta, t) - v \partial_\zeta c(\zeta, t) + k_r c(\zeta, t)
@@ -97,11 +97,10 @@ with $\delta(\zeta)$ being dirac delta function. The system's spectrum can now b
 
 \begin{figure}[!htbp]
     \centering
-    \includesvg[inkscapelatex=false, width=0.35\textwidth, keepaspectratio]{Figures/eig_val_dist_R_0.3.svg}
+    \includesvg[inkscapelatex=false, width=0.3\textwidth, keepaspectratio]{Figures/eig_val_dist_R_0.3.svg}
     \caption{Eigenvalues of operator $\mathfrak{A}$.}
     \label{fig:eigval_dist}
 \end{figure}
-
 
 \begin{table}[ht]
     \centering
