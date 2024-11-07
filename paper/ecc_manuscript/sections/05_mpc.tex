@@ -1,7 +1,7 @@
 \section{Model Predictive Controller Design}
 
 In this section, the observer-based MPC shown in Fig.~\ref{fig:block_diagram} is developed with the goal of stabilizing the given unstable infinite-dimensional system within an optimal framework, relying solely on output measurements while satisfying input constraints. 
-An infinite-time open-loop objective function sets the foundation of the controller design in the discrete-time setting at each sampling instant $k$, which consists of a weighted sum of state deviations and actuation costs for all future time instances, subject to the system dynamics and input constraints, as shown in \eqref{eq:MPC_inf_time}.
+An infinite-time open-loop objective function sets the foundation of the controller design in the discrete-time setting at each sampling instant $k$. The objective function consists of a weighted sum of actuation costs as well as state deviations, for all future time instances, subject to the system dynamics and input constraints. Since full-state is assumed to be unavailable, reconstructed states are used to estimate states of the system, as shown in \eqref{eq:MPC_inf_time}.
 
 \begin{figure}[!htbp]
     \centering
@@ -43,7 +43,7 @@ where $\mathfrak{Q}$ and $\mathfrak{F}$ are positive definite operators of appro
     \end{aligned}
 \end{equation}
 
-Obtained as the solution to the discrete-time Lyapunov equation, $\mathfrak{P}$ is the terminal cost operator as shown in \eqref{eq:terminal_cost}; which can be proven to be positive definite only if the terminal state $\underline{\hat{x}}(\zeta, k+N | k)$ is in a stable subspace. Therefore, an equality constraint is introduced to guarantee that the resulting quadratic optimization problem is convex. The terminal constraint is enforced by setting the projection of the terminal state onto the unstable subspace of the system to zero \cite{curtainbook, xu2017linear, khatibi2021model}. Here, $\underline{\phi_u}(\zeta)$ is the set of unstable eigenfunctions of the system, for all eigenvalues where $\operatorname{Re}(\lambda_u) \geq 0$.
+Here, $\mathfrak{P}$ is the terminal cost operator obtained as the solution to the discrete-time Lyapunov equation, as shown in \eqref{eq:terminal_cost}. This operator can be shown to be positive definite only if the terminal state $\underline{\hat{x}}(\zeta, k+N | k)$ is in a stable subspace. Therefore, for the resulting quadratic optimization problem to be convex, an equality constraint is introduced to guarantee $\mathfrak{P}$ is positive definite. The terminal constraint is enforced by setting the projection of the terminal state onto the unstable subspace of the system to zero \cite{curtainbook, xu2017linear, khatibi2021model}.
 
 \begin{equation} \label{eq:terminal_cost}
     \mathfrak{P} (\cdot) = \sum_{m=0}^{\infty} \sum_{n=0}^{\infty} 
@@ -55,38 +55,4 @@ Obtained as the solution to the discrete-time Lyapunov equation, $\mathfrak{P}$ 
     \langle (\cdot) , \underline{\psi_n} \rangle \phi_m
 \end{equation}
 
-One may further process the optimization problem in \eqref{eq:MPC_finite_time} to obtain a standard format for quadratic programming (QP) solvers by substituting the future states in terms of the current state and the sequence of future inputs using system dynamics expression. The resulting QP problem is given in \eqref{eq:MPC_QP}. The optimal input sequence $U$ is then obtained by solving the QP problem at each sampling instant $k$. To implement a receding horizon control strategy, only the first input of the optimal sequence $u(k+1|k)$ is applied to the system, and the optimization problem is solved again at the next sampling instant $k+1$.
-
-\begin{equation} \label{eq:MPC_QP}
-    \begin{aligned}
-        \min_{U} &J = U^T \langle I,H \rangle U + 2U^T \langle I, P \underline{\hat{x}}(\zeta, k|k) \rangle \\
-        \text{s.t.} &\qquad U^{min} \leq U \leq U^{max} \\
-        &\qquad T_u \underline{\hat{x}}(\zeta, k|k) + S_u U = 0
-        \, \\
-        \text{with } &H = \\
-        &\hspace{-3.5em }\begin{bmatrix}
-            \mathfrak{B}_d^* \mathfrak{P} \mathfrak{B}_d + \mathfrak{F} & \mathfrak{B}_d^* \mathfrak{A}_d^* \mathfrak{P} \mathfrak{B}_d & \cdots &  \mathfrak{B}_d^* {\mathfrak{A}_d^*}^{N-1} \mathfrak{P} \mathfrak{B}_d \\
-            \mathfrak{B}_d^* \mathfrak{P} \mathfrak{A}_d \mathfrak{B}_d & \mathfrak{B}_d^* \mathfrak{P} \mathfrak{B}_d + \mathfrak{F} & \cdots & \mathfrak{B}_d^* {\mathfrak{A}_d^*}^{N-2} \mathfrak{P} \mathfrak{B}_d \\
-            \vdots & \vdots & \ddots & \vdots \\
-            \mathfrak{B}_d^* \mathfrak{P} {\mathfrak{A}_d}^{N-1} \mathfrak{B}_d & \mathfrak{B}_d^* \mathfrak{P} {\mathfrak{A}_d}^{N-2} \mathfrak{B}_d & \cdots & \mathfrak{B}_d^* \mathfrak{P} \mathfrak{B}_d + \mathfrak{F}
-        \end{bmatrix} \\
-        P = &\begin{bmatrix}
-            \mathfrak{B}_d^* \mathfrak{P} {\mathfrak{A}_d} &
-            \mathfrak{B}_d^* \mathfrak{P} {\mathfrak{A}_d}^{2}  &
-            \hdots &
-            \mathfrak{B}_d^* \mathfrak{P} {\mathfrak{A}_d}^{N} 
-        \end{bmatrix}^T \\
-        T_u (\cdot) = &\begin{bmatrix}
-            \langle {\mathfrak{A}_d}^{N} (\cdot), \underline{\phi_u} \rangle
-        \end{bmatrix} \\
-        S_u = &\begin{bmatrix}
-            \langle {\mathfrak{A}_d}^{N-1} \mathfrak{B}_d, \underline{\phi_u} \rangle & 
-            \langle {\mathfrak{A}_d}^{N-2} \mathfrak{B}_d, \underline{\phi_u} \rangle &
-            \hdots &
-            \langle \mathfrak{B}_d, \underline{\phi_u} \rangle
-        \end{bmatrix} \\
-        U = &\begin{bmatrix}
-            u(k+1|k) & u(k+2|k) & \hdots & u(k+N|k)
-        \end{bmatrix}^T
-    \end{aligned}
-\end{equation}
+Here, $\underline{\phi_u}(\zeta)$ is the set of unstable eigenfunctions of the system, for all eigenvalues where $\operatorname{Re}(\lambda_u) \geq 0$. In addition, $\underline{\phi_i}$ and $\underline{\psi_i}$ correspond to the $i^{th}$ eigenfunction of the original and adjoint system, respectively. This problem can be further manipulated into a standard format for quadratic programming (QP) solvers. Refer to Appendix \ref{app:QP} for derivation details and results.

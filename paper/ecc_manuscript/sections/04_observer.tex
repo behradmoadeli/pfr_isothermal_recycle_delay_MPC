@@ -21,7 +21,7 @@ where $\underline{\hat{x}}(\zeta, t)$ is the reconstructed state of the original
     \end{aligned}
 \end{equation}
 
-The goal is to design the observer gain $\mathfrak{L}_c$ such that the error dynamics are exponentially stable, i.e. $\max\{\operatorname{Re}(\lambda_{o})\}~<~0$ where $\lambda_{o}$ are the eigenvalues of the error dynamics matrix $\mathfrak{A}_o$. Three different forms of the observer gain are considered as spatial functions $\mathfrak{L}_c = f(\zeta, l_{obs})$ with the effect of the scalar coefficient $l_{obs}$ on $\max\{\operatorname{Re}(\lambda_{o})\}$ shown in Fig.~\ref{fig:L_vs_lambda}.
+The goal is to design the observer gain $\mathfrak{L}_c$ such that the error dynamics are exponentially stable, i.e. $\max\{\operatorname{Re}(\lambda_{o})\}~<~0$ where $\{\lambda_{o}\}$ is the set of eigenvalues of the error dynamics operator $\mathfrak{A}_o$. Three different forms of the observer gain are considered as spatial functions $\mathfrak{L}_c = f(\zeta, l_{obs})$ with the effect of the scalar coefficient $l_{obs}$ on $\max\{\operatorname{Re}(\lambda_{o})\}$ shown in Fig.~\ref{fig:L_vs_lambda}.
 
 \begin{figure}[!htbp]
     \centering
@@ -53,4 +53,4 @@ with $\mathfrak{A}_d$ and $\mathfrak{B}_d$ defined in \eqref{eq:discrete_AB}, an
     \end{aligned}
 \end{equation}
 
-It has been proven that using this approach, the discrete-time error dynamics will be stable if the continuous-time observer gain $\mathfrak{L}_c$ is chosen such that $\mathfrak{A}_o$ is stable. It is worth noting that the methodology presented skips the need for model reduction associated with the discrete-time Luenberger observer, with no spatial approximation required as well \cite{dochain2000state,dochain2001state,alonso2004optimal,ali2015review,khatibi2021model}.
+It can been shown that using this approach, the discrete-time error dynamics will be stable if the continuous-time observer gain $\mathfrak{L}_c$ is chosen such that $\mathfrak{A}_o$ is stable. It is also worth noting that the proposed methodology skips the need for model reduction associated with the discrete-time Luenberger observer, with no spatial approximation required as well \cite{dochain2000state,dochain2001state,alonso2004optimal,ali2015review,khatibi2021model}.

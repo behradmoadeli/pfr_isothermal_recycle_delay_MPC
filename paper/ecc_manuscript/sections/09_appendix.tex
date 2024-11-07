@@ -1,9 +1,9 @@
-\section*{Appendix}
+% \section*{Appendix}
 
+\appendix
+\subsection{Adjoint System Operators} \label{app:adjoint}
 
-\subsection{Adjoint system} \label{app:adjoint}
-
-In this part, the adjoint system operators $\mathfrak{A}^*$ and $\mathfrak{B}^*$ are obtained. Utilizing the relation $\langle \mathfrak{A} \underline{x} + \mathfrak{B} u, \underline{y}\rangle = \langle \underline{x}, \mathfrak{A}^* \underline{y}\rangle + \langle u, \mathfrak{B}^* \underline{y}\rangle$, the adjoint operators $\mathfrak{A}^*$ and $\mathfrak{B}^*$ are obtained as shown in \eqref{eq:adjoint_A} and \eqref{eq:adjoint_B}, respectively.
+Utilizing the relation $\langle \mathfrak{A} \underline{x} + \mathfrak{B} u, \underline{y}\rangle = \langle \underline{x}, \mathfrak{A}^* \underline{y}\rangle + \langle u, \mathfrak{B}^* \underline{y}\rangle$, the adjoint operators $\mathfrak{A}^*$ and $\mathfrak{B}^*$ are obtained in this part. The results are shown in \eqref{eq:adjoint_A} and \eqref{eq:adjoint_B} for $\mathfrak{A}^*$ and $\mathfrak{B}^*$, respectively.
 
 \begin{equation} \label{eq:adjoint_A}
     \begin{aligned}
@@ -24,7 +24,7 @@ In this part, the adjoint system operators $\mathfrak{A}^*$ and $\mathfrak{B}^*$
     \mathfrak{B}^* (\cdot) = \Bigl[ v(1-R) \int_0^1 \delta(\zeta) (\cdot) d\zeta \quad , \quad 0 \Bigr]
 \end{equation}
 
-Once the adjoint operators are determined, the eigenfunctions $\{ \underline{\phi_i}(\zeta), \underline{\psi_i}(\zeta) \}$ (for $\mathfrak{A}$ and $\mathfrak{A}^*$, respectively) may be obtained and properly scaled following the calculation of eigenvalues. The set of scaled eigenfunctions will then form a bi-orthonormal basis for the Hilbert space $X$; which will be later used in the controller design. It is important to note that the system is not self adjoint, as the obtained adjoint operator and its domain are not the same as the original operator and its domain.
+Once the adjoint operators are determined, the eigenfunctions $\{ \underline{\phi_i}(\zeta), \underline{\psi_i}(\zeta) \}$ (for $\mathfrak{A}$ and $\mathfrak{A}^*$, respectively) may be obtained and properly scaled following the calculation of eigenvalues. The system appears to be non-self-adjoint, as the obtained adjoint operator and its domain are not the same as the original operator and its domain. However, they share the same set of eigenvalues. Thus, the set of scaled eigenfunctions may be used to form a bi-orthonormal basis for the Hilbert space $X$; which will be later used in the controller design. 
 
 \subsection{Resolvent Operator Derivation} \label{app:resolvent}
 
@@ -205,3 +205,43 @@ Since the system generator $\mathfrak{A}$ is not self-adjoint, the resolvent ope
 % \end{equation}
 
 % Same procedure can be applied to obtain the closed form expression for resolvent operator of the adjoint system. To avoid redundancy, the details are not provided here.
+
+\subsection{Standard QP Representation for the MPC Optimization Problem} \label{app:QP}
+Simple algebraic manipulation can be done to utilize system dynamics in order to express future state estimations in terms of the current estimated state and a sequence of future inputs; transforming the optimization problem in \eqref{eq:MPC_finite_time} into the standard format accepted by conventional quadratic programming (QP) solvers, which is shown in \eqref{eq:MPC_QP}.
+
+
+\begin{equation} \label{eq:MPC_QP}
+    \begin{aligned}
+        \min_{U} &J = U^T \langle I,H \rangle U + 2U^T \langle I, P \underline{\hat{x}}(\zeta, k|k) \rangle \\
+        \text{s.t.} &\qquad U^{min} \leq U \leq U^{max} \\
+        &\qquad T_u \underline{\hat{x}}(\zeta, k|k) + S_u U = 0
+        \, \\
+        \text{with } &H = \\
+        &\hspace{-3.5em }\begin{bmatrix}
+            \mathfrak{B}_d^* \mathfrak{P} \mathfrak{B}_d + \mathfrak{F} & \mathfrak{B}_d^* \mathfrak{A}_d^* \mathfrak{P} \mathfrak{B}_d & \cdots &  \mathfrak{B}_d^* {\mathfrak{A}_d^*}^{N-1} \mathfrak{P} \mathfrak{B}_d \\
+            \mathfrak{B}_d^* \mathfrak{P} \mathfrak{A}_d \mathfrak{B}_d & \mathfrak{B}_d^* \mathfrak{P} \mathfrak{B}_d + \mathfrak{F} & \cdots & \mathfrak{B}_d^* {\mathfrak{A}_d^*}^{N-2} \mathfrak{P} \mathfrak{B}_d \\
+            \vdots & \vdots & \ddots & \vdots \\
+            \mathfrak{B}_d^* \mathfrak{P} {\mathfrak{A}_d}^{N-1} \mathfrak{B}_d & \mathfrak{B}_d^* \mathfrak{P} {\mathfrak{A}_d}^{N-2} \mathfrak{B}_d & \cdots & \mathfrak{B}_d^* \mathfrak{P} \mathfrak{B}_d + \mathfrak{F}
+        \end{bmatrix} \\
+        P = &\begin{bmatrix}
+            \mathfrak{B}_d^* \mathfrak{P} {\mathfrak{A}_d} &
+            \mathfrak{B}_d^* \mathfrak{P} {\mathfrak{A}_d}^{2}  &
+            \hdots &
+            \mathfrak{B}_d^* \mathfrak{P} {\mathfrak{A}_d}^{N} 
+        \end{bmatrix}^T \\
+        T_u (\cdot) = &\begin{bmatrix}
+            \langle {\mathfrak{A}_d}^{N} (\cdot), \underline{\phi_u} \rangle
+        \end{bmatrix} \\
+        S_u = &\begin{bmatrix}
+            \langle {\mathfrak{A}_d}^{N-1} \mathfrak{B}_d, \underline{\phi_u} \rangle & 
+            \langle {\mathfrak{A}_d}^{N-2} \mathfrak{B}_d, \underline{\phi_u} \rangle &
+            \hdots &
+            \langle \mathfrak{B}_d, \underline{\phi_u} \rangle
+        \end{bmatrix} \\
+        U = &\begin{bmatrix}
+            u(k+1|k) & u(k+2|k) & \hdots & u(k+N|k)
+        \end{bmatrix}^T
+    \end{aligned}
+\end{equation}
+
+The optimal input sequence $U$ is derived by solving the resulting QP problem at each sampling instant $k$. Following a receding horizon control strategy, only the first input of the optimal sequence, $u(k+1|k)$, is applied to the system to obtain the output measurement $y(k+1)$. Luenberger observer will then reconstruct the states at the sampling instant $k+1$ having access to the output and the input. This is followed by the optimization problem being solved again at the new sampling instant $k+1$, and the above strategy repeats itself.
