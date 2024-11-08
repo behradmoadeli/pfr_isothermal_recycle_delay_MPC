@@ -1,49 +1,44 @@
 % \section*{Appendix}
 
 \appendix
-\subsection{Adjoint System Operators} \label{app:adjoint}
+% \subsection{Adjoint System Operators} \label{app:adjoint}
+% Utilizing the relation $\langle \mathfrak{A} \underline{x} + \mathfrak{B} u, \underline{y}\rangle = \langle \underline{x}, \mathfrak{A}^* \underline{y}\rangle + \langle u, \mathfrak{B}^* \underline{y}\rangle$, the adjoint operators $\mathfrak{A}^*$ and $\mathfrak{B}^*$ are obtained in this part. The results are shown in \eqref{eq:adjoint_A} for $\mathfrak{A}^*$ and $\mathfrak{B}^*$.
+% \begin{equation} \label{eq:adjoint_A}
+%     \begin{aligned}
+%         {\mathfrak{A}}^{*} =&
+%         \begin{bmatrix}
+%             D \partial_{\zeta \zeta} + v \partial_\zeta +k_r & 0\\
+%             0 & -\frac{1}{\tau} \partial_\zeta
+%         \end{bmatrix}\\
+%         \mathcal{D}(\mathfrak{A}^*) =& \Bigl\{ \underline{y} = [y_1, y_2]^T \in Y:\\
+%         &\underline{y}(\zeta), \partial_\zeta \underline{y}(\zeta), \partial_{\zeta \zeta} \underline{y}(\zeta) \quad \mathrm{a.c.},\\
+%         &D \partial_\zeta y_1(1) + v y_1(1) = \frac{1}{\tau} y_2(1), \\
+%         &R v y_1(0) = \frac{1}{\tau} y_2(0), 
+%         \partial_\zeta y_1(0) = 0 \Bigr\} \\
+%         \mathfrak{B}^* (\cdot) =& \Bigl[ v(1-R) \int_0^1 \delta(\zeta) (\cdot) d\zeta \quad , \quad 0 \Bigr]
+%     \end{aligned}
+% \end{equation}
 
-Utilizing the relation $\langle \mathfrak{A} \underline{x} + \mathfrak{B} u, \underline{y}\rangle = \langle \underline{x}, \mathfrak{A}^* \underline{y}\rangle + \langle u, \mathfrak{B}^* \underline{y}\rangle$, the adjoint operators $\mathfrak{A}^*$ and $\mathfrak{B}^*$ are obtained in this part. The results are shown in \eqref{eq:adjoint_A} and \eqref{eq:adjoint_B} for $\mathfrak{A}^*$ and $\mathfrak{B}^*$, respectively.
-
-\begin{equation} \label{eq:adjoint_A}
-    \begin{aligned}
-        {\mathfrak{A}}^{*} =&
-        \begin{bmatrix}
-            D \partial_{\zeta \zeta} + v \partial_\zeta +k_r & 0\\
-            0 & -\frac{1}{\tau} \partial_\zeta
-        \end{bmatrix}\\
-        \mathcal{D}(\mathfrak{A}^*) =& \Bigl\{ \underline{y} = [y_1, y_2]^T \in Y:\\
-        &\underline{y}(\zeta), \partial_\zeta \underline{y}(\zeta), \partial_{\zeta \zeta} \underline{y}(\zeta) \quad \mathrm{a.c.},\\
-        &D \partial_\zeta y_1(1) + v y_1(1) = \frac{1}{\tau} y_2(1), \\
-        &R v y_1(0) = \frac{1}{\tau} y_2(0), 
-        \partial_\zeta y_1(0) = 0 \Bigr\}
-    \end{aligned}
-\end{equation}
-
-\begin{equation} \label{eq:adjoint_B}
-    \mathfrak{B}^* (\cdot) = \Bigl[ v(1-R) \int_0^1 \delta(\zeta) (\cdot) d\zeta \quad , \quad 0 \Bigr]
-\end{equation}
-
-Once the adjoint operators are determined, the eigenfunctions $\{ \underline{\phi_i}(\zeta), \underline{\psi_i}(\zeta) \}$ (for $\mathfrak{A}$ and $\mathfrak{A}^*$, respectively) may be obtained and properly scaled following the calculation of eigenvalues. The system appears to be non-self-adjoint, as the obtained adjoint operator and its domain are not the same as the original operator and its domain. However, they share the same set of eigenvalues. Thus, the set of scaled eigenfunctions may be used to form a bi-orthonormal basis for the Hilbert space $X$; which will be later used in the controller design. 
-
+% Once the adjoint operators are determined, the eigenfunctions $\{ \underline{\phi_i}(\zeta), \underline{\psi_i}(\zeta) \}$ (for $\mathfrak{A}$ and $\mathfrak{A}^*$, respectively) may be obtained and properly scaled following the calculation of eigenvalues. The system appears to be non-self-adjoint, as the obtained adjoint operator and its domain are not the same as the original operator and its domain. However, they share the same set of eigenvalues. Thus, the set of scaled eigenfunctions may be used to form a bi-orthonormal basis for the Hilbert space $X$; which will be later used in the controller design. 
 \subsection{Resolvent Operator Derivation} \label{app:resolvent}
-
-One must obtain the resolvent operator of the system $\mathfrak{R}(s, \mathfrak{A}) = (sI-\mathfrak{A})^{-1}$ prior to constructing the discrete-time representation of the system. One way to obtain it is by utilizing the modal characteristics of the system, resulting in an infinite-sum representation of the operator. While being a common practice in the literature, truncating the infinite-sum representation for numerical implementation may lead to a loss of accuracy. Another way to express the resolvent operator is by treating it as an operator that maps either the initial condition of the system $\underline{x}(\zeta,0)$ or the input $u(t)$, to the Laplace transform of the state of the system $\underline{X}(\zeta, s)$. This approach, although more computationally intensive, results in a closed form expression for the resolvent operator, preserving the infinite-dimensional nature of the system. In \eqref{eq:resolvent}, Laplace transform is applied to the LTI representation of the system for both zero-input response and zero-state response to obtain a general expression for the resolvent operator.
+To obtain the closed form of the resolvent operator $\mathfrak{R}(s, \mathfrak{A}) = (sI-\mathfrak{A})^{-1}$, it can be treated as an operator that maps the initial condition or the input to the Laplace transform of the state of the system $\underline{X}(\zeta, s)$. In \eqref{eq:resolvent}, Laplace transform is applied to the LTI representation of the system for both zero-input response and zero-state response to obtain a general expression for the resolvent operator. The goal is to obtain the solution for $\underline{X}(\zeta, s)$ and compare it with the general expression obtained in \eqref{eq:resolvent} to get the closed form expression for the resolvent operator. First step is to apply Laplace transform to the original system of PDEs in \eqref{eq:operator_A}. The second order derivative term is decomposed to two first order PDEs, constructing a new $3 \times 3$ system of first order ODEs with respect to $\zeta$ after Laplace transformation, as shown in \eqref{eq:laplace_transformed} along with the solution.
 
 \begin{equation} \label{eq:resolvent}
     \begin{aligned}
         \dot{\underline{x}}(\zeta, t) &= \mathfrak{A} \underline{x}(\zeta, t) + \mathfrak{B} u(t) \xrightarrow{\mathcal{L}}\\
         s \underline{X}(\zeta,s) - \underline{x}(\zeta,0) &= \mathfrak{A} \underline{X}(\zeta,s) + \mathfrak{B} U(s)\\
-        &\hspace{-7.5em}\begin{cases}
+        &\hspace{-7.5em
+        }\begin{cases}
             \xrightarrow{u = 0} &\underline{X}(\zeta,s) = (sI - \mathfrak{A})^{-1} \underline{x}(\zeta,0) = \mathfrak{R}(s, \mathfrak{A}) \underline{x}(\zeta,0)\\
             \xrightarrow{\underline{x}(0, \zeta)}& \underline{X}(\zeta,s) = (sI - \mathfrak{A})^{-1} \mathfrak{B} U(s) = \mathfrak{R}(s, \mathfrak{A}) \mathfrak{B} U(s)
         \end{cases}
     \end{aligned}
-    \end{equation}
-    
-    The goal is to obtain the solution for $\underline{X}(\zeta, s)$ and compare it with the general expression obtained in \eqref{eq:resolvent} to get the closed form expression for the resolvent operator. First step is to apply Laplace transform to the original system of PDEs in \eqref{eq:operator_A}. The second order derivative term is decomposed to two first order PDEs, constructing a new $3 \times 3$ system of first order ODEs with respect to $\zeta$ after Laplace transformation, as shown in \eqref{eq:laplace_transformed} with solution given by \eqref{eq:ODE_solution}.
-    
-    \begin{equation} \label{eq:laplace_transformed}
+\end{equation}
+
+Since the boundary conditions are not homogeneous, $\underline{\tilde{X}}(0,s)$ needs to be obtained by solving the system of algebraic equations given in \eqref{eq:BC_AE}.
+Having access to $\underline{\tilde{X}}(0,s)$, the resolvent operator can be explicitly derived as shown in \eqref{eq:resolvent_u} and \eqref{eq:resolvent_x} for zero-state and zero-input cases, respectively.
+
+\begin{equation} \label{eq:laplace_transformed}
     \begin{aligned}
         \partial_\zeta \overbrace{\begin{bmatrix}
             X_1(\zeta,s)\\ \partial_\zeta X_1(\zeta,s)\\ X_2(\zeta,s)
@@ -57,33 +52,38 @@ One must obtain the resolvent operator of the system $\mathfrak{R}(s, \mathfrak{
             &+ \underbrace{\begin{bmatrix}
                 0\\ -\frac{x_1(\zeta,0)}{D} + v(1-R) \delta(\zeta) U(s)\\ -\tau x_2(\zeta,0)
             \end{bmatrix}}_{Z(\zeta,s)} \\
-            \Rightarrow \partial_\zeta \underline{\tilde{X}}(\zeta,s) &= P(s) \underline{\tilde{X}}(\zeta,s) + Z(\zeta,s)
+            % \partial_\zeta \underline{\tilde{X}}(\zeta,s) &= P(s) \underline{\tilde{X}}(\zeta,s) + Z(\zeta,s) \\
+            \Rightarrow \underline{\tilde{X}}(\zeta,s) &= \underbrace{e^{P(s)\zeta}}_{T(\zeta,s)} \underline{\tilde{X}}(0,s) + \int_0^\zeta \underbrace{e^{P(s)(\zeta - \eta)}}_{F(\zeta, \eta)} Z(\eta,s) d\eta
     \end{aligned}
-    \end{equation} 
-    
-    \begin{equation} \label{eq:ODE_solution}
-        \underline{\tilde{X}}(\zeta,s) = \underbrace{e^{P(s)\zeta}}_{T(\zeta,s)} \underline{\tilde{X}}(0,s) + \int_0^\zeta \underbrace{e^{P(s)(\zeta - \eta)}}_{F(\zeta, \eta)} Z(\eta,s) d\eta
-    \end{equation}
-    
-    Since the boundary conditions are not homogeneous, $\underline{\tilde{X}}(0,s)$ needs to be obtained by solving the system of algebraic equations given in \eqref{eq:BC_AE}; which is the result of applying Danckwerts boundary conditions to the Laplace transformed system of PDEs at $\zeta = 1$.
-    
-    \begin{equation} \label{eq:BC_AE}
+\end{equation}
+
+\begin{equation} \label{eq:BC_AE}
+\begin{aligned}
+        &\overbrace{\begin{bmatrix}
+            -v & D & Rv\\
+            T_{11}(1,s) & T_{12}(1,s) & -T_{33}(1,s)\\
+            T_{21}(1,s) & T_{22}(1,s) & 0
+        \end{bmatrix}}^{M^{-1}(s)} \underline{\tilde{X}}(0,s) =\\ 
+        &\underbrace{\int_0^1 \begin{bmatrix}
+            0\\ F_{33}(1, \eta) Z_3(\eta,s) - F_{12}(1, \eta) Z_2(\eta,s)\\ -F_{22}(1, \eta) Z_2(\eta,s)
+        \end{bmatrix} d\eta}_{\underline{b}(s)} \\
+        % \Rightarrow &\underline{\tilde{X}}(0,s) = M(s) \underline{b}(s)
+\end{aligned}
+\end{equation}
+
+\begin{equation} \label{eq:resolvent_u}
     \begin{aligned}
-            &\overbrace{\begin{bmatrix}
-                -v & D & Rv\\
-                T_{11}(1,s) & T_{12}(1,s) & -T_{33}(1,s)\\
-                T_{21}(1,s) & T_{22}(1,s) & 0
-            \end{bmatrix}}^{M^{-1}(s)} \underline{\tilde{X}}(0,s) =\\ 
-            &\underbrace{\int_0^1 \begin{bmatrix}
-                0\\ F_{33}(1, \eta) Z_3(\eta,s) - F_{12}(1, \eta) Z_2(\eta,s)\\ -F_{22}(1, \eta) Z_2(\eta,s)
-            \end{bmatrix} d\eta}_{\underline{b}(s)} \\
-            \Rightarrow &\underline{\tilde{X}}(0,s) = M(s) \underline{b}(s)
+        &\underline{x}(\zeta,0) = 0 \Rightarrow \mathfrak{R}(s, \mathfrak{A}) \mathfrak{B} (\cdot) = \begin{bmatrix}
+            \mathfrak{R}_{1} \mathfrak{B}\\
+            \mathfrak{R}_{2} \mathfrak{B}
+        \end{bmatrix} (\cdot) \Rightarrow\\
+        &\mathfrak{R}_{1} \mathfrak{B} = -v(1-R) \bigl[ \sum_{j=1}^{2} T_{1j}(\zeta) (M_{j2} T_{12}(1) + M_{j3} T_{22}(1)) \\
+        &\hspace{3em} - T_{12}(\zeta) \bigr] (\cdot)\\
+        &\mathfrak{R}_{2} \mathfrak{B} = -v(1-R) \left[ T_{33}(\zeta) (M_{32} T_{12}(1) + M_{33} T_{22}(1)) \right] (\cdot)
     \end{aligned}
-    \end{equation}
-    
-    Having access to $\underline{\tilde{X}}(0,s)$, the solution for $\underline{X}(\zeta,s)$ can be explicitly derived. The resolvent operator for zero-input and zero-state cases are therefore obtained in a closed form as shown in \eqref{eq:resolvent_x} and \eqref{eq:resolvent_u}, respectively.
-    
-    \begin{equation} \label{eq:resolvent_x}
+\end{equation}
+
+\begin{equation} \label{eq:resolvent_x}
     \begin{aligned}
         &U(s) = 0 \Rightarrow \mathfrak{R}(s, \mathfrak{A}) \underline{(\cdot)} = \begin{bmatrix}
             \mathfrak{R}_{11} & \mathfrak{R}_{12}\\
@@ -96,27 +96,14 @@ One must obtain the resolvent operator of the system $\mathfrak{R}(s, \mathfrak{
         &\mathfrak{R}_{12} = \sum_{j=1}^2 -\tau T_{1j}(\zeta) \int_0^1 M_{j2} F_{33}(1,\eta) (\cdot)_2 d\eta\\
         &\mathfrak{R}_{21} = \frac{T_{33}(\zeta)}{D} \int_0^1 \left[ M_{32} F_{12}(1,\eta) + M_{33} F_{22}(1,\eta) \right] (\cdot)_1 d\eta\\
         &\mathfrak{R}_{22} = -\tau T_{33}(\zeta) \int_0^1 M_{32} F_{33}(1,\eta) (\cdot)_2 d\eta\\
-        &\hspace{2.5em} -\tau \int_0^{\zeta} F_{33}(\zeta, \eta) (\cdot)_2 d\eta
+        &\hspace{2.5em} -\tau \int_0^{\zeta} F_{33}(\zeta, \eta) (\cdot)_2 d\eta \\
     \end{aligned}
-    \end{equation}
-    
-    \begin{equation} \label{eq:resolvent_u}
-    \begin{aligned}
-        &\underline{x}(\zeta,0) = 0 \Rightarrow \mathfrak{R}(s, \mathfrak{A}) \mathfrak{B} (\cdot) = \begin{bmatrix}
-            \mathfrak{R}_{1} \mathfrak{B}\\
-            \mathfrak{R}_{2} \mathfrak{B}
-        \end{bmatrix} (\cdot) \Rightarrow\\
-        &\mathfrak{R}_{1} \mathfrak{B} = -v(1-R) \bigl[ \sum_{j=1}^{2} T_{1j}(\zeta) (M_{j2} T_{12}(1) + M_{j3} T_{22}(1)) \\
-        &\hspace{3em} - T_{12}(\zeta) \bigr] (\cdot)\\
-        &\mathfrak{R}_{2} \mathfrak{B} = -v(1-R) \left[ T_{33}(\zeta) (M_{32} T_{12}(1) + M_{33} T_{22}(1)) \right] (\cdot)
-    \end{aligned}
-    \end{equation}
+\end{equation}
 
-Since the system generator $\mathfrak{A}$ is not self-adjoint, the resolvent operator for the adjoint system shall also be obtained. This is done in a similar manner as the original system, resulting in a closed-form expression for the adjoint resolvent operator $\mathfrak{R}^*(s, \mathfrak{A}^*)$. To avoid redundancy, the derivation of the resolvent operator for the adjoint system is not included in this manuscript.
-
+% Since the system generator $\mathfrak{A}$ is not self-adjoint, the resolvent operator for the adjoint system shall also be obtained. This is done in a similar manner as the original system, resulting in a closed-form expression for the adjoint resolvent operator $\mathfrak{R}^*(s, \mathfrak{A}^*)$. To avoid redundancy, the derivation of the resolvent operator for the adjoint system is not included in this manuscript.
 \subsection{Standard QP Representation for the MPC Optimization Problem} \label{app:QP}
 Simple algebraic manipulation can be done to utilize system dynamics in order to express future state estimations in terms of the current estimated state and a sequence of future inputs; transforming the optimization problem in \eqref{eq:MPC_finite_time} into the standard format accepted by conventional quadratic programming (QP) solvers, which is shown in \eqref{eq:MPC_QP}.
-
+The optimal input sequence $U$ is derived by solving the resulting QP problem at each sampling instant $k$. Following a receding horizon control strategy, only the first input of the optimal sequence, $u(k+1|k)$, is applied to the system to obtain the output measurement $y(k+1)$. Luenberger observer will then reconstruct the states at the sampling instant $k+1$ having access to the output and the input. This is followed by the optimization problem being solved again at the new sampling instant $k+1$, and the above strategy repeats itself.
 
 \begin{equation} \label{eq:MPC_QP}
     \begin{aligned}
@@ -151,5 +138,3 @@ Simple algebraic manipulation can be done to utilize system dynamics in order to
         \end{bmatrix}^T
     \end{aligned}
 \end{equation}
-
-The optimal input sequence $U$ is derived by solving the resulting QP problem at each sampling instant $k$. Following a receding horizon control strategy, only the first input of the optimal sequence, $u(k+1|k)$, is applied to the system to obtain the output measurement $y(k+1)$. Luenberger observer will then reconstruct the states at the sampling instant $k+1$ having access to the output and the input. This is followed by the optimization problem being solved again at the new sampling instant $k+1$, and the above strategy repeats itself.

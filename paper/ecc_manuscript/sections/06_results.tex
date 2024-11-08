@@ -1,5 +1,4 @@
 \section{Results and Discussion}
-
 Numerical simulations for the closed-loop system under the proposed observer-based output feedback MPC is presented in this section, with parameters chosen according to Table~\ref{tab:pars}. As the eigenvalue distribution obtained in Fig(\ref{fig:eigval_dist}) suggests, the open-loop system is unstable due to the presence of an eigenvalue with positive real part. 
 
 An infinite-dimensional MPC is designed and applied to the system with the initial condition for the reactor set to $c(\zeta,0) = \sin^2(\pi \zeta)$. The recycle stream is assumed to be empty at the beginning of the simulation. The state deviation and actuation penalty terms are set as $\mathfrak{Q} = 0.04 I$ and $\mathfrak{F} = 27$. The sampling time and the horizon length for the MPC are set to $\Delta t = 20$ s and $N = 9$, respectively, while the input constraints are assumed to be $0 \leq u(t) \leq 0.15$. The initial condition for estimated states are assumed to be zero all over the domain. Lastly, the observer gain is set as a constant function $\mathfrak{L}_c = 1$. 
@@ -8,21 +7,21 @@ The closed-loop response of the system is shown in Fig(\ref{fig:closedloop_respo
 
 \begin{figure}[!htbp]
     \centering
-    \includesvg[inkscapelatex=false, width=0.4\textwidth, keepaspectratio]{Figures/closedloop_response.svg}
+    \includesvg[inkscapelatex=false, height=0.22\textwidth, keepaspectratio]{Figures/closedloop_response.svg}
     \caption{Stabilized reactor concentration profile under the proposed MPC.}
     \label{fig:closedloop_response}
 \end{figure}
 
 \begin{figure}[!htbp]
     \centering
-    \includesvg[inkscapelatex=false, width=0.4\textwidth, keepaspectratio]{Figures/input.svg}
+    \includesvg[inkscapelatex=false, height=0.22\textwidth, keepaspectratio]{Figures/input.svg}
     \caption{Input constraints, the obtained input profile, and the reactor output under the proposed MPC.}
     \label{fig:control_input}
 \end{figure}
 
 \begin{figure}[!htbp]
     \centering
-    \includesvg[inkscapelatex=false, width=0.4\textwidth, keepaspectratio]{Figures/observation_error.svg}
+    \includesvg[inkscapelatex=false, height=0.22\textwidth, keepaspectratio]{Figures/observation_error.svg}
     \caption{State reconstruction error profile of the proposed Luenberger observer along the reactor.}
     \label{fig:observation_error}
 \end{figure}

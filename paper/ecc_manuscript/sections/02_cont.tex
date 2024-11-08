@@ -1,10 +1,8 @@
 \section{Continuous-time Model Representation}
-
 Fig.~\ref{fig:reactor_scheme} illustrates a chemical process, i.e. a first-order irreversible reaction within an axial dispersion tubular reactor \cite{levenspiel1998chemical}. The reactor is equipped with a recycle mechanism, allowing a portion of the product stream to re-enter the reactor, increasing the conversion of the substrate.  Utilizing first-principle modeling through relevant mass balance relations on an infinitesimally thin disk element along the longitudinal axis of the reactor, the dynamics describing the concentration within the system results in a second-order parabolic PDE, a common class of equations used to characterize diffusion-convection-reaction systems \cite{jensen1982bifurcation}. 
-
 \begin{figure}[!htbp] 
     \centering
-    \begin{tikzpicture}
+    \begin{tikzpicture}[scale=0.85, transform shape]
         \node (pfr) [cylinder, draw, minimum height=3cm, minimum width=1cm, shape aspect=1, shape border rotate=180, cylinder uses custom fill, cylinder end fill=gray!45, cylinder body fill=gray!15] {$\mathcal{A} \rightarrow \mathcal{B}$};
         \node (pfr_inlet) [circle, left of=pfr, xshift=-0.5cm, fill=black, draw, inner sep=0pt, minimum size=0.25cm, scale=0.5] {};
         \node (pfr_outlet) [circle, at={(pfr.east)}, shift={(-0.25cm,0)}, fill=black, draw, inner sep=0pt, minimum size=0.25cm, scale=0.5] {};
@@ -28,80 +26,60 @@ Fig.~\ref{fig:reactor_scheme} illustrates a chemical process, i.e. a first-order
     % \pdfbookmark[2]{Figure: Reactor Scheme}{fig:reactor_scheme}
 \end{figure}
 
-In an attempt to make the model more realistic for common axial dispersion tubular reactors in chemical industry, Dankwerts boundary conditions are chosen as they are known to be suitable for this purpose by accounting for deviations from perfect mixing and piston flow, assuming negligible transport lags in connecting lines \cite{danckwerts1993continuous}. The delayed state resulting from the recycled portion of the flow, occurring $\tau$ seconds back in time, is applied at the inlet boundary condition. The governing equation is given by the PDE represented by \eqref{eq:PDE_original_model}, subject to the aforementioned boundary conditions in \eqref{eq:BC}.
+In an attempt to make the model more realistic for common axial dispersion tubular reactors in chemical industry, Dankwerts boundary conditions are chosen as they are known to be suitable for this purpose by accounting for deviations from perfect mixing and piston flow, assuming negligible transport lags in connecting lines \cite{danckwerts1993continuous}. The delayed state resulting from the recycled portion of the flow, occurring $\tau$ seconds back in time, is applied at the inlet boundary condition. The governing equation along with the boundary conditions are given by \eqref{eq:PDE_original_model}.
 
 \begin{equation} \label{eq:PDE_original_model}
-    \dot{c}(\zeta, t) = D \partial_{\zeta \zeta} c(\zeta, t) - v \partial_\zeta c(\zeta, t) + k_r c(\zeta, t)
+    \begin{aligned}
+        &\dot{c}(\zeta, t) = D \partial_{\zeta \zeta} c(\zeta, t) - v \partial_\zeta c(\zeta, t) + k_r c(\zeta, t) \\
+        &\begin{cases}
+            &D \partial_\zeta c(0, t) - v c(0, t) = -v \left[ R c(1, t-\tau) + (1-R) u(t) \right] \\
+            &\partial_\zeta c(1, t) = 0 \\
+            &y(t) = c(1, t)
+        \end{cases}
+    \end{aligned}
 \end{equation}
-
-\begin{align} \label{eq:BC}
-    \begin{cases}
-        &D \partial_\zeta c(0, t) - v c(0, t) = -v \left[ R c(1, t-\tau) + (1-R) u(t) \right] \\
-        &\partial_\zeta c(1, t) = 0 \\
-        &y(t) = c(1, t)
-    \end{cases}
-\end{align}
 
 Here, $c(\zeta, t)$ is the concentration of the product along the reactor, representing the state of the system. The physical parameters $D$, $v$, $k_r$, $R$, and $\tau$ represent the diffusion coefficient, flow velocity along the reactor, reaction constant, recycle ratio, and residence time of the recycle flow, respectively. The coordinate system in space and time is represented by $\zeta$ and $t$, where $\zeta \in [0, 1]$ and $t \in [0, \infty)$.
 
 An interesting approach to address delays where the problem involves other forms of PDEs is to reformulate the problem such that the notion of delay is replaced with an alternative transport PDE \cite{krstic2009book}. 
 Therefore, the state variable $c(\zeta,t)$ is replaced with a new state variable $\underline{x}(\zeta, t) \equiv [x_1(\zeta, t), x_2(\zeta, t)]^T$ as a vector of functions, where $x_1(\zeta, t)$ represents the concentration within the reactor—analogous to $c(\zeta,t)$—and $x_2(\zeta, t)$ is the new state variable for the concentration along the recycle stream. The delay is thus modeled as a pure transport process rather than being present in the argument of the state at the boundary—i.e. $c(1,t-\tau)$— making all state variables expressed explicitly at a specific time instance $t$, resulting in the standard state-space form for a given infinite-dimensional linear time-invariant (LTI) system given in \eqref{eq:state_space}.
-
 \begin{equation} \label{eq:state_space}
     \begin{aligned}
         \dot{\underline{x}}(\zeta, t) &= \mathfrak{A} \underline{x}(\zeta, t) + \mathfrak{B} u(t) \\
         y(t) &= \mathfrak{C} \underline{x}(\zeta, t)
     \end{aligned}
 \end{equation}
-
-Here, $\mathfrak{A}$ is a linear operator $\mathcal{L}(X)$ acting on a Hilbert space $X: L^2[0,1] \times L^2[0,1]$ and $\underline{x}(\zeta,t)$, as defined previously, is the vector of functions describing the states of the system. The operator $\mathfrak{A}$ and its domain are defined in \eqref{eq:operator_A}. Also, $\mathfrak{B}$ is a linear operator that maps the scalar input from input-space onto the state space, as defined in \eqref{eq:operator_B}. Finally, the output operator $\mathfrak{C}$ is defined in \eqref{eq:operator_C}, where it maps the state to the output $y(t)$, which is the concentration at the reactor outlet according to \eqref{eq:BC}.
+Here, $\mathfrak{A}$ is a linear operator $\mathcal{L}(X)$ acting on a Hilbert space $X: L^2[0,1] \times L^2[0,1]$ and $\underline{x}(\zeta,t)$, as defined previously, is the vector of functions describing the states of the system. The operators ($\mathfrak{A}$, $\mathfrak{B}$, $\mathfrak{C}$, and $\mathfrak{D}$) are defined in \eqref{eq:operator_A} for the infinite-dimensional LTI system.
 
 \begin{equation} \label{eq:operator_A}
     \begin{aligned}
-        \mathfrak{A} \equiv&
+        \mathfrak{A} &\equiv
         \begin{bmatrix}
             D \partial_{\zeta \zeta} - v \partial_\zeta + k_r & 0 \\
             0 & \frac{1}{\tau} \partial_\zeta
-        \end{bmatrix}\\
-        \mathcal{D}(\mathfrak{A}) =& \Bigl\{ \underline{x}(\zeta) = [x_1(\zeta), x_2(\zeta)]^T \in X:\\
-        &\underline{x}(\zeta), \partial_\zeta \underline{x}(\zeta), \partial_{\zeta \zeta} \underline{x}(\zeta) \quad \mathrm{a.c.},\\
-        &D \partial_\zeta x_1(0) - v x_1(0) = -v R x_2(0),\\
-        &\partial_\zeta x_1(1) = 0,
-        x_1(1) = x_2(1) \Bigr\}
-    \end{aligned}
-\end{equation}
-
-\begin{equation} \label{eq:operator_B}
-    \begin{aligned}
-        \mathfrak{B} &\equiv
+        \end{bmatrix} \hspace{0.4em}
+        \mathfrak{B} \equiv
         \begin{bmatrix}
             \delta(\zeta) \\
             0
         \end{bmatrix} \cdot (1-R) v \\
-        % \mathcal{D}(\mathfrak{B}) &= \Bigl\{ u \in \mathbb{R} \Bigr\}
-    \end{aligned}
-\end{equation}
-
-\begin{equation} \label{eq:operator_C}
-    \begin{aligned}
         \mathfrak{C} &\equiv
         \begin{bmatrix}
             \delta(\zeta-1) &
-            0
-        \end{bmatrix}\\
+            \hspace{3.7em} 0 \hspace{0.6em}
+        \end{bmatrix} \hspace{0.42em}
+        \mathfrak{D} = 0
         % \mathcal{D}(\mathfrak{C}) &= \mathcal{D}(\mathfrak{A})
     \end{aligned}
 \end{equation}
-
 with $\delta(\zeta)$ being dirac delta function. The system's spectrum can now be obtained by solving the eigenvalue problem for the system generator $\mathfrak{A}$. To do this, the characteristics equation of the system needs to be obtained by solving the equation $det(\mathfrak{A}-\lambda_i~I)~=~0$ for $\lambda_i$, where $\lambda_i \in \mathbb{C}$ is the $i^{\text{th}}$ eigenvalue of the system and $I$ is the identity operator. Attempts to analytically solve this equation will fail; therefore, it is solved numerically given the parameters in Table~\ref{tab:pars}. The eigenvalue distribution is given in Figure~\ref{fig:eigval_dist} in the complex plane. This suggests that the open-loop system is unstable, as there are eigenvalues with positive real parts.
 
 \begin{figure}[!htbp]
     \centering
-    \includesvg[inkscapelatex=false, width=0.3\textwidth, keepaspectratio]{Figures/eig_val_dist_R_0.3.svg}
+    \includesvg[inkscapelatex=false, height=0.25\textwidth, keepaspectratio]{Figures/eig_val_dist_R_0.3.svg}
     \caption{Eigenvalues of operator $\mathfrak{A}$.}
     \label{fig:eigval_dist}
 \end{figure}
-
 \begin{table}[ht]
     \centering
     \caption{Physical Parameters for the System}
@@ -117,4 +95,4 @@ with $\delta(\zeta)$ being dirac delta function. The system's spectrum can now b
     \end{tabular}
 \end{table}
 
-It is necessary to obtain the adjoint system operators $\mathfrak{A}^*$ and $\mathfrak{B}^*$ in order to derive the resolvent operator of the system, which is later utilized in performing the Caley-Tustin time discretization. The derivation of the adjoint system operators is provided in Appendix \ref{app:adjoint}, followed by the derivation of an exact closed-form representation for the resolvent operator detailed in Appendix \ref{app:resolvent}. 
+The exact closed-form representation for the resolvent operator is derived in Appendix \ref{app:resolvent}. Since the system is not self-adjoint, the adjoint system operators $\mathfrak{A}^*$ and $\mathfrak{B}^*$ as well as the resolvent operator for the adjoint system must be obtained in the same manner as the original system. However, this is not included in the manuscript to avoid redundancy.
