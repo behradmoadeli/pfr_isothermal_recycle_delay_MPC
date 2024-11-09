@@ -39,10 +39,10 @@ In an attempt to make the model more realistic for common axial dispersion tubul
     \end{aligned}
 \end{equation}
 
-Here, $c(\zeta, t)$ is the concentration of the product along the reactor, representing the state of the system. The physical parameters $D$, $v$, $k_r$, $R$, and $\tau$ represent the diffusion coefficient, flow velocity along the reactor, reaction constant, recycle ratio, and residence time of the recycle flow, respectively. The coordinate system in space and time is represented by $\zeta$ and $t$, where $\zeta \in [0, 1]$ and $t \in [0, \infty)$.
+Here, $c(\zeta, t)$ is the concentration along the reactor, representing the state of the system. The physical parameters $D$, $v$, $k_r$, $R$, and $\tau$ represent the diffusion coefficient, flow velocity along the reactor, reaction constant, recycle ratio, and residence time of the recycle flow, respectively. The coordinate system in space and time is represented by $\zeta$ and $t$, where $\zeta \in [0, 1]$ and $t \in [0, \infty)$.
 
 An interesting approach to address delays where the problem involves other forms of PDEs is to reformulate the problem such that the notion of delay is replaced with an alternative transport PDE \cite{krstic2009book}. 
-Therefore, the state variable $c(\zeta,t)$ is replaced with a new state variable $\underline{x}(\zeta, t) \equiv [x_1(\zeta, t), x_2(\zeta, t)]^T$ as a vector of functions, where $x_1(\zeta, t)$ represents the concentration within the reactor—analogous to $c(\zeta,t)$—and $x_2(\zeta, t)$ is the new state variable for the concentration along the recycle stream. The delay is thus modeled as a pure transport process rather than being present in the argument of the state at the boundary—i.e. $c(1,t-\tau)$— making all state variables expressed explicitly at a specific time instance $t$, resulting in the standard state-space form for a given infinite-dimensional linear time-invariant (LTI) system given in \eqref{eq:state_space}.
+Therefore, the state variable $c(\zeta,t)$ is replaced with a new state variable $\underline{x}(\zeta, t) \equiv [x_1(\zeta, t), x_2(\zeta, t)]^T$ as a vector of functions, where $x_1(\zeta, t)$ represents the concentration within the reactor—analogous to $c(\zeta,t)$—and $x_2(\zeta, t)$ is the new state variable for the concentration along the recycle stream. The delay is thus modeled as a pure transport process rather than being present in the argument of the state at the boundary—i.e. $c(1,t-\tau)$— making all state variables expressed explicitly at a specific time instance $t$, resulting in the standard state-space form for an infinite-dimensional linear time-invariant (LTI) system given in \eqref{eq:state_space}.
 \begin{equation} \label{eq:state_space}
     \begin{aligned}
         \dot{\underline{x}}(\zeta, t) &= \mathfrak{A} \underline{x}(\zeta, t) + \mathfrak{B} u(t) \\
@@ -80,6 +80,7 @@ with $\delta(\zeta)$ being dirac delta function. The system's spectrum can now b
     \caption{Eigenvalues of operator $\mathfrak{A}$.}
     \label{fig:eigval_dist}
 \end{figure}
+
 \begin{table}[ht]
     \centering
     \caption{Physical Parameters for the System}
