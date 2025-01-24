@@ -2,12 +2,14 @@
 
 \subsection{Model representation}
 
-The chemical process depicted in Fig.~\ref{fig:reactor_scheme} illustrates a first-order irreversible chemical reaction within an axial dispersion tubular reactor \cite{levenspiel1998chemical}. The reactor features a recycle mechanism, allowing a portion of the product stream to re-enter the reactor, ensuring the consumption of any unreacted substrate. The reactor's dynamics can be described by a second-order parabolic PDE, a common class of equations used to characterize diffusion-convection-reaction systems \cite{jensen1982bifurcation}. The resulting PDE that describes the reactor model is given by \eqref{eq:PDE_original_model}, subject to the boundary conditions in \eqref{eq:BC}, obtained by utilizing first-principle modeling through relevant mass balance relations on an infinitesimally thin disk element along the longitudinal axis of the reactor.
+The chemical process depicted in Fig.~\ref{fig:reactor_scheme} illustrates a chemical reaction within an axial dispersion tubular reactor \cite{levenspiel1998chemical} where reactant $A$ is converted into products. The reactor features a recycle mechanism, allowing a portion of the product stream to re-enter the reactor, ensuring the consumption of any unreacted substrate. The dynamics of the reactant concentration can be described by the second-order parabolic PDE given by \eqref{eq:PDE_original_model}
+
+% , a common class of equations used to characterize diffusion-convection-reaction systems \cite{jensen1982bifurcation}. The resulting PDE that describes the reactor model is , subject to the boundary conditions in \eqref{eq:BC}, obtained by utilizing first-principle modeling through relevant mass balance relations on an infinitesimally thin disk element along the longitudinal axis of the reactor.
 
 \begin{figure}[!htbp] 
     \centering
     \begin{tikzpicture}
-        \node (pfr) [cylinder, draw, minimum height=3cm, minimum width=1cm, shape aspect=1, shape border rotate=180, cylinder uses custom fill, cylinder end fill=gray!45, cylinder body fill=gray!15] {$\mathcal{A} \rightarrow \mathcal{B}$};
+        \node (pfr) [cylinder, draw, minimum height=3cm, minimum width=1cm, shape aspect=1, shape border rotate=180, cylinder uses custom fill, cylinder end fill=gray!45, cylinder body fill=gray!15] {\hspace{-0.2cm}$A \rightarrow Products$};
         \node (pfr_inlet) [circle, left of=pfr, xshift=-0.5cm, fill=black, draw, inner sep=0pt, minimum size=0.25cm, scale=0.5] {};
         \node (pfr_outlet) [circle, at={(pfr.east)}, shift={(-0.25cm,0)}, fill=black, draw, inner sep=0pt, minimum size=0.25cm, scale=0.5] {};
         \node (recycle_right) [circle, right of=pfr_outlet, fill=black, draw, inner sep=0pt, minimum size=0.25cm, scale=0.5] {};
@@ -16,12 +18,12 @@ The chemical process depicted in Fig.~\ref{fig:reactor_scheme} illustrates a fir
         \draw[dotted, thick] ([yshift=0.5cm]pfr_inlet.center) -- node[at end, below, yshift=0.1cm] {$\zeta = 0$} ([yshift=-0.65cm]pfr_inlet.center);
         \draw[dotted, thick] ([yshift=0.5cm]pfr_outlet.center) -- node[at end, below, yshift=0.1cm] {$\zeta = 1$} ([yshift=-0.65cm]pfr_outlet.center);
         
-        \node[below of=recycle_left, node distance=1.3cm, anchor=north west, xshift=-0.2cm] {$R \, c(1, t-\tau)$};
-        \node[above of=pfr_inlet, node distance=0.75cm,] {$c(0, t)$};
-        \node[above of=pfr_outlet, node distance=0.75cm,] {$c(1, t)$};
+        \node[below of=recycle_left, node distance=1.3cm, anchor=north west, xshift=-0.2cm] {$R \, C_A(1, t-\tau)$};
+        \node[above of=pfr_inlet, node distance=0.75cm,] {$C_A(0, t)$};
+        \node[above of=pfr_outlet, node distance=0.75cm,] {$C_A(1, t)$};
         
         \draw [arrow_2] (pfr_outlet) -- node[near end, above] {$y(t)$} ++(2,0);
-        \draw [arrow_2] (pfr_inlet) ++(-2,0) coordinate(start) -- node[near start, above] {$u(t)$} (pfr_inlet);
+        \draw [arrow_2] (pfr_inlet) ++(-2,0) coordinate(start) -- node[near start, above] {$C_A^{feed}(t)$} (pfr_inlet);
         \draw [arrow_2] (recycle_right) -- ++(0,-1.25) -| (recycle_left);
         
     \end{tikzpicture}
@@ -31,8 +33,17 @@ The chemical process depicted in Fig.~\ref{fig:reactor_scheme} illustrates a fir
 \end{figure}
 
 \begin{equation} \label{eq:PDE_original_model}
+    \dot{C}_A(\zeta, t) = D \partial_{\zeta \zeta} C_A(\zeta, t) - v \partial_\zeta C_A(\zeta, t) + r (C_A)
+\end{equation}
+
+
+Here, $C_A(\zeta, t)$ is the concentration of reactant $A$ along the reactor. The physical parameters $D$ and $v$ represent the diffusion coefficient and flow velocity along the reactor, respectively. Physical parameters are assumed to be constant, hence changes in temperature or pressure will not affect the reactor model. The coordinate system in space and time is represented by $\zeta$ and $t$, where $\zeta \in [0, 1]$ and $t \in [0, \infty)$. In addition, $r(C_A)$ is the reaction rate of the reactant in general, which is often a non-linear function of $C_A$. Therefore, the model is further linearized around its steady-state, followed by introducing the deviation variable $c(\zeta, t) = C_A(\zeta, t) - C_{A, ss}(\zeta)$, where $C_{A, ss}(\zeta)$ is the steady-state concentration of the reactant. The linearized model is then given by \eqref{eq:PDE_linearized_model}.
+
+\begin{equation} \label{eq:PDE_linearized_model}
     \dot{c}(\zeta, t) = D \partial_{\zeta \zeta} c(\zeta, t) - v \partial_\zeta c(\zeta, t) + k_r c(\zeta, t)
 \end{equation}
+
+Here, $k_r \equiv \left. \dfrac{\partial r(C_A)}{\partial C_A} \right|_{C_{A, ss}}$ is the linearized reaction rate coefficient in the vicinity of the steady-state. The system input is also defined as a deviation variable $u(t) \equiv C_{A}^{feed} - C_{A, ss}^{feed}$, representing the deviation of the concentration of the reactant being fed into the reactor from its steady-state value. The input stream is then mixed with the delayed state resulting from the recycled portion of the reactant at the reactor outlet occurring $\tau$ seconds back in time, forming one of the boundary conditions. In an attempt to make the model more realistic for common axial dispersion tubular reactors in chemical industry, Dankwerts boundary conditions are chosen as they are known to be suitable for this purpose by accounting for deviations from perfect mixing and piston flow, assuming negligible transport lags in connecting lines \cite{danckwerts1993continuous}. The boundary conditions are all represented in \eqref{eq:BC}, where parameters $R$ and $\tau$ represent the recycle ratio and the residence time along the recycle stream.
 
 \begin{align} \label{eq:BC}
     \begin{cases}
@@ -42,11 +53,7 @@ The chemical process depicted in Fig.~\ref{fig:reactor_scheme} illustrates a fir
     \end{cases}
 \end{align}
 
-Here, $c(\zeta, t)$ is the concentration of the product along the reactor, representing the state of the system. The physical parameters $D$, $v$, $k_r$, $R$, and $\tau$ represent the diffusion coefficient, flow velocity along the reactor, reaction constant, recycle ratio, and residence time of the recycle flow, respectively. The coordinate system in space and time is represented by $\zeta$ and $t$, where $\zeta \in [0, 1]$ and $t \in [0, \infty)$.
-
-In an attempt to make the model more realistic for common axial dispersion tubular reactors in chemical industry, Dankwerts boundary conditions are chosen as they are known to be suitable for this purpose by accounting for deviations from perfect mixing and piston flow, assuming negligible transport lags in connecting lines \cite{danckwerts1993continuous}. The delayed state resulting from the recycled portion of the flow, occurring $\tau$ seconds back in time, is applied at the inlet boundary condition, as shown in \eqref{eq:BC}.
-
-In the case where the problem involves similar forms of PDEs, an effective general practice to address delays in systems is to reformulate the problem such that the notion of delay is replaced with an alternative transport PDE. Therefore, a new state variable $\underline{x}(\zeta, t) \equiv [x_1(\zeta, t), x_2(\zeta, t)]^T$ is defined as a vector of functions, where $x_1(\zeta, t)$ represents the concentration within the reactor—analogous to $c(\zeta,t)$—and $x_2(\zeta, t)$ is introduced as a new state variable to account for the concentration along the recycle stream. The delay is thus modeled as a pure transport process, wherein the first state $x_1(\zeta, t)$ is transported from the reactor outlet to the inlet, experiencing a delay of $\tau$ time units while in the recycle stream. This makes all state variables expressed explicitly at a specific time instance $t$, resulting in the standard state-space form for a given infinite-dimensional linear time-invariant (LTI) system $\dot{\underline{x}} = \mathfrak{A} \underline{x} + \mathfrak{B} u$. Here, $\mathfrak{A}$ is a linear operator $\mathcal{L}(X)$ acting on a Hilbert space $X: L^2[0,1] \times L^2[0,1]$ and $\underline{x}(\zeta,t)$, as defined previously, is the vector of functions describing the states of the system. The operator $\mathfrak{A}$ and its domain are defined in detail as shown in \eqref{eq:operator_A}. Also, $\mathfrak{B}$ is a linear operator that maps the scalar input from input-space onto the state space, as defined in \eqref{eq:operator_B}.
+In the case where the problem involves similar forms of PDEs, an effective general practice to address delays in systems is to reformulate the problem such that the notion of delay is replaced with an alternative transport PDE. Therefore, a new state variable $\underline{x}(\zeta, t) \equiv [x_1(\zeta, t), x_2(\zeta, t)]^T$ is defined as a vector of functions, where $x_1(\zeta, t)$ represents the concentration within the reactor—analogous to $c(\zeta,t)$—and $x_2(\zeta, t)$ is introduced as a new state variable to account for the concentration along the recycle stream. The delay is thus modeled as a pure transport process, wherein the first state $x_1(\zeta, t)$ is transported from the reactor outlet to the inlet, experiencing a delay of $\tau$ time units while in the recycle stream. This makes all state variables expressed explicitly at a specific time instance $t$, resulting in the standard state-space form for a given infinite-dimensional linear time-invariant (LTI) system $\dot{\underline{x}} = \mathfrak{A} \underline{x} + \mathfrak{B} u$. Here, $\mathfrak{A}$ is a linear operator $\mathcal{L}(X)$ acting on a Hilbert space $X: L^2[0,1] \times L^2[0,1]$ as shown in \eqref{eq:operator_A}. Also, $\mathfrak{B}$ is a linear operator that maps the scalar input from input-space onto the state space, as defined in \eqref{eq:operator_B}.
 
 \begin{equation} \label{eq:operator_A}
     \begin{aligned}
@@ -74,7 +81,10 @@ In the case where the problem involves similar forms of PDEs, an effective gener
     \end{aligned}
 \end{equation}
 
-where $\delta(\zeta)$ is dirac delta function. This will enable the derivation of the system's spectrum using the eigenvalue problem. The characteristics equation of the system is obtained by solving the equation $det(\mathfrak{A}-\lambda_i~I)~=~0$ for $\lambda_i$, where $\lambda_i \in \mathbb{C}$ is the $i^{\text{th}}$ eigenvalue of the system and $I$ is the identity operator. Attempts to analytically solve this equation has failed; therefore, it is solved numerically using the parameters in Table~\ref{tab:pars}. The resulting eigenvalue distribution is depicted in Figure~\ref{fig:eigval_dist} in the complex plane.
+where $\delta(\zeta)$ is dirac delta function. This will enable the derivation of the system's spectrum using the eigenvalue problem. The characteristics equation of the system is obtained by solving the equation $det(\mathfrak{A}-\lambda_i~I)~=~0$ for $\lambda_i$, where $\lambda_i \in \mathbb{C}$ is the $i^{\text{th}}$ eigenvalue of the system and $I$ is the identity operator. Attempts to analytically solve this equation have failed; therefore, it is solved numerically using the parameters in Table~I. These parameters are carefully chosen to reflect key characteristics of the system, i.e. diffusion, convection, reaction, and delayed recycle. A negative reaction coefficient ($k_r$) is used to induce instability for analysis, a condition uncommon for isothermal reactors but possible in specific cases like autocatalytic or inhibitory reactions. Figure~2 depicts the resulting eigenvalue distribution in the complex plane, confirming instability of the linearized model near its steady state.
+
+
+Attempts to analytically solve this equation has failed; therefore, it is solved numerically using the parameters in Table~\ref{tab:pars}. The resulting eigenvalue distribution is depicted in Figure~\ref{fig:eigval_dist} in the complex plane.
 
 \begin{figure}[!htbp]
     \centering
@@ -93,7 +103,7 @@ where $\delta(\zeta)$ is dirac delta function. This will enable the derivation o
     \textbf{Parameter}        & \textbf{Symbol} & \textbf{Value}     & \textbf{Unit}    \\ \hline
     Diffusivity               & $D$             & $2\times10^{-5}$   & ${m^2}/{s}$      \\ \hline
     Velocity                  & $v$             & $0.01$   & ${m}/{s}$        \\ \hline
-    Reaction Constant         & $k_r$           & $1.5$              & $s^{-1}$         \\ \hline
+    Reaction Constant         & $k_r$           & $-1.5$             & $s^{-1}$         \\ \hline
     Recycle Residence Time    & $\tau$          & $80$               & $s$              \\ \hline
     Recycle Ratio             & $R$             & $0.3$              & $-$              \\ \hline
     \end{tabular}
@@ -215,9 +225,9 @@ One must obtain the resolvent operator of the system $\mathfrak{R}(s, \mathfrak{
 
 Since the system generator $\mathfrak{A}$ is not self-adjoint, the resolvent operator for the adjoint system shall also be obtained. This is done in a similar manner as the original system, resulting in a closed-form expression for the adjoint resolvent operator $\mathfrak{R}^*(s, \mathfrak{A}^*)$. To avoid redundancy, the derivation of the resolvent operator for the adjoint system is not included in this manuscript.
 
-\subsection{Caley-Tustin time discretization}
+\subsection{Cayley-Tustin time discretization}
 
-Having access to the resolvent operators of the original and the adjoint system, the Caley-Tustin time-discretization may be utilized to map the continuous-time setting to the discrete-time setting without losing crucial dynamical properties of the system, such as stability and controllability. This Crank-Nicolson type of discretization is also known as the lowest order symplectic integrator in Gauss quadrature-based Runge-Kutta methods \cite{hairer2006geometric}. Considering $\Delta t$ as the sampling time, and assuming a piecewise constant input within time intervals (a.k.a. zero-order hold), the discrete-time representation $\underline{x}(\zeta, k) = \mathfrak{A}_d \underline{x}(\zeta, k-1) + \mathfrak{B}_d u(k)$ is obtained, with discrete-time operators $\mathfrak{A}_d$ and $\mathfrak{B}_d$ defined in \eqref{eq:discrete_AB}, where $\alpha = 2/{\Delta t}$.
+To implement the system on digital controllers, it is necessary to transition to a discrete-time framework while preserving critical properties such as stability and controllability. The Cayley-Tustin time-discretization method achieves this by mapping the continuous-time system to the discrete domain \cite{havu2007cayley, xu2017linear}. This Crank-Nicolson type of discretization is also known as the lowest order symplectic integrator in Gauss quadrature-based Runge-Kutta methods \cite{hairer2006geometric}. Considering $\Delta t$ as the sampling time, and assuming a piecewise constant input within time intervals (zero-order hold), the discrete-time representation $\underline{x}(\zeta, k) = \mathfrak{A}_d \underline{x}(\zeta, k-1) + \mathfrak{B}_d u(k)$ is obtained, with discrete-time operators $\mathfrak{A}_d$ and $\mathfrak{B}_d$ defined in \eqref{eq:discrete_AB}, where $\alpha = 2/{\Delta t}$.
 
 \begin{equation} \label{eq:discrete_AB}
     \begin{bmatrix}
