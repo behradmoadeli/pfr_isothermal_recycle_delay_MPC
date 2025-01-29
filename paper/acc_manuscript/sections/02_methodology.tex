@@ -88,8 +88,6 @@ In the case where the problem involves similar forms of PDEs, an effective gener
 where $\delta(\zeta)$ is dirac delta function. This will enable the derivation of the system's spectrum using the eigenvalue problem. The characteristics equation of the system is obtained by solving the equation $det(\mathfrak{A}-\lambda_i~I)~=~0$ for $\lambda_i$, where $\lambda_i \in \mathbb{C}$ is the $i^{\text{th}}$ eigenvalue of the system and $I$ is the identity operator. Attempts to analytically solve this equation have failed; therefore, it is solved numerically using the parameters in Table~I. These parameters are carefully chosen to reflect key characteristics of the system, i.e. diffusion, convection, reaction, and delayed recycle. A negative reaction coefficient ($k_r$) is used to induce instability for analysis, a condition uncommon for isothermal reactors but possible in specific cases like autocatalytic or inhibitory reactions. Figure~2 depicts the resulting eigenvalue distribution in the complex plane, confirming instability of the linearized model near its steady state.
 
 
-Attempts to analytically solve this equation has failed; therefore, it is solved numerically using the parameters in Table~\ref{tab:pars}. The resulting eigenvalue distribution is depicted in Figure~\ref{fig:eigval_dist} in the complex plane.
-
 \begin{figure}[!htbp]
     \centering
     \includesvg[inkscapelatex=false, width=0.35\textwidth, keepaspectratio]{Figures/eig_val_dist_R_0.3.svg}
