@@ -43,7 +43,11 @@ Here, $C_A(\zeta, t)$ is the concentration of reactant $A$ along the reactor. Th
     \dot{c}(\zeta, t) = D \partial_{\zeta \zeta} c(\zeta, t) - v \partial_\zeta c(\zeta, t) + k_r c(\zeta, t)
 \end{equation}
 
-Here, $k_r \equiv \left. \dfrac{\partial r(C_A)}{\partial C_A} \right|_{C_{A, ss}}$ is the linearized reaction rate coefficient in the vicinity of the steady-state. The system input is also defined as a deviation variable $u(t) \equiv C_{A}^{feed} - C_{A, ss}^{feed}$, representing the deviation of the concentration of the reactant being fed into the reactor from its steady-state value. The input stream is then mixed with the delayed state resulting from the recycled portion of the reactant at the reactor outlet occurring $\tau$ seconds back in time, forming one of the boundary conditions. In an attempt to make the model more realistic for common axial dispersion tubular reactors in chemical industry, Dankwerts boundary conditions are chosen as they are known to be suitable for this purpose by accounting for deviations from perfect mixing and piston flow, assuming negligible transport lags in connecting lines \cite{danckwerts1993continuous}. The boundary conditions are all represented in \eqref{eq:BC}, where parameters $R$ and $\tau$ represent the recycle ratio and the residence time along the recycle stream.
+Here, $k_r \equiv \left. \dfrac{\partial r(C_A)}{\partial C_A} \right|_{C_{A, ss}}$ is the linearized reaction rate coefficient in the vicinity of the steady-state. The system input is defined as $u(t) \equiv C_{A}^{feed} - C_{A, ss}^{feed}$, representing the deviation of the concentration of the reactant being fed into the reactor from its steady-state value. The output of the system is also considered as the deviation of the concentration of the reactant being measured at the reactor outlet from its steady-state value, denoted as $y(t)$. 
+
+To accurately represent the behavior of the given axial dispersion tubular reactor, Dankwerts boundary conditions are applied; as they effectively capture deviations from ideal mixing and piston flow while assuming negligible transport lags in connecting lines \cite{danckwerts1993continuous}.
+The inlet boundary condition is modified to reflect the mixing of the input stream with the delayed state, i.e. the recycled reactant concentration coming from the reactor outlet, occurring $\tau$ seconds earlier.
+These boundary conditions are therefore summarized in \eqref{eq:BC}, with $R$ and $\tau$ denoting the recycle ratio and the residence time in the recycle stream, respectively.
 
 \begin{align} \label{eq:BC}
     \begin{cases}
@@ -72,12 +76,12 @@ In the case where the problem involves similar forms of PDEs, an effective gener
 
 \begin{equation} \label{eq:operator_B}
     \begin{aligned}
-        \mathfrak{B} &\equiv
+        \mathfrak{B} \equiv
         \begin{bmatrix}
             \delta(\zeta) \\
             0
-        \end{bmatrix} v (1-R) \\
-        D(\mathfrak{B}) &= \Bigl\{ u \in \mathbb{R} \Bigr\}
+        \end{bmatrix} v (1-R), \quad
+        D(\mathfrak{B}) = \Bigl\{ u \in \mathbb{R} \Bigr\}
     \end{aligned}
 \end{equation}
 
