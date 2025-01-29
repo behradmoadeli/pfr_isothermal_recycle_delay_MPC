@@ -33,14 +33,14 @@ The chemical process depicted in Fig.~\ref{fig:reactor_scheme} illustrates a che
 \end{figure}
 
 \begin{equation} \label{eq:PDE_original_model}
-    \dot{C}_A(\zeta, t) = D \partial_{\zeta \zeta} C_A(\zeta, t) - v \partial_\zeta C_A(\zeta, t) + r (C_A)
+    \dot{C}_A(\zeta, t) = D \partial_{\zeta \zeta} C_A(\zeta, t) - v \partial_\zeta C_A(\zeta, t) - r (C_A)
 \end{equation}
 
 
 Here, $C_A(\zeta, t)$ is the concentration of reactant $A$ along the reactor. The physical parameters $D$ and $v$ represent the diffusion coefficient and flow velocity along the reactor, respectively. Physical parameters are assumed to be constant, hence changes in temperature or pressure will not affect the reactor model. The coordinate system in space and time is represented by $\zeta$ and $t$, where $\zeta \in [0, 1]$ and $t \in [0, \infty)$. In addition, $r(C_A)$ is the reaction rate of the reactant in general, which is often a non-linear function of $C_A$. Therefore, the model is further linearized around its steady-state, followed by introducing the deviation variable $c(\zeta, t) = C_A(\zeta, t) - C_{A, ss}(\zeta)$, where $C_{A, ss}(\zeta)$ is the steady-state concentration of the reactant. The linearized model is then given by \eqref{eq:PDE_linearized_model}.
 
 \begin{equation} \label{eq:PDE_linearized_model}
-    \dot{c}(\zeta, t) = D \partial_{\zeta \zeta} c(\zeta, t) - v \partial_\zeta c(\zeta, t) + k_r c(\zeta, t)
+    \dot{c}(\zeta, t) = D \partial_{\zeta \zeta} c(\zeta, t) - v \partial_\zeta c(\zeta, t) - k_r c(\zeta, t)
 \end{equation}
 
 Here, $k_r \equiv \left. \dfrac{\partial r(C_A)}{\partial C_A} \right|_{C_{A, ss}}$ is the linearized reaction rate coefficient in the vicinity of the steady-state. The system input is defined as $u(t) \equiv C_{A}^{feed} - C_{A, ss}^{feed}$, representing the deviation of the concentration of the reactant being fed into the reactor from its steady-state value. The output of the system is also considered as the deviation of the concentration of the reactant being measured at the reactor outlet from its steady-state value, denoted as $y(t)$. 
