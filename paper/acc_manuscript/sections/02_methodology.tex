@@ -63,7 +63,7 @@ In the case where the problem involves similar forms of PDEs, an effective gener
     \begin{aligned}
         \mathfrak{A} \equiv&
         \begin{bmatrix}
-            D \partial_{\zeta \zeta} - v \partial_\zeta + k_r & 0 \\
+            D \partial_{\zeta \zeta} - v \partial_\zeta - k_r & 0 \\
             0 & \frac{1}{\tau} \partial_\zeta
         \end{bmatrix}\\
         D(\mathfrak{A}) =& \Bigl\{ \underline{x}(\zeta) = [x_1(\zeta), x_2(\zeta)]^T \in X:\\
@@ -120,7 +120,7 @@ Next step is to obtain the adjoint system operators $\mathfrak{A}^*$ and $\mathf
     \begin{aligned}
         {\mathfrak{A}}^{*} =&
         \begin{bmatrix}
-            D \partial_{\zeta \zeta} + v \partial_\zeta +k_r & 0\\
+            D \partial_{\zeta \zeta} + v \partial_\zeta - k_r & 0\\
             0 & -\frac{1}{\tau} \partial_\zeta
         \end{bmatrix}\\
         D(\mathfrak{A}^*) =& \Bigl\{ \underline{y} = [y_1, y_2]^T \in Y:\\
@@ -160,7 +160,7 @@ One must obtain the resolvent operator of the system $\mathfrak{R}(s, \mathfrak{
             X_1(\zeta,s)\\ \partial_\zeta X_1(\zeta,s)\\ X_2(\zeta,s)
         \end{bmatrix}}^{\underline{\tilde{X}}(\zeta,s)} &= \overbrace{\begin{bmatrix}
             0 & 1 & 0\\
-            \frac{s-k}{D} & \frac{v}{D} & 0\\
+            \frac{s+k_r}{D} & \frac{v}{D} & 0\\
             0 & 0 & s\tau
             \end{bmatrix}}^{P(s)} \, \begin{bmatrix}
                 X_1(\zeta,s)\\ \partial_\zeta X_1(\zeta,s)\\ X_2(\zeta,s)
