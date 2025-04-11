@@ -56,9 +56,6 @@ A.~A. Alonso, I.~G. Kevrekidis, J.~R. Banga, and C.~E. Frouzakis, ``Optimal sens
 \bibitem{ali2015review}
 J.~M. Ali, N.~H. Hoang, M.~A. Hussain, and D.~Dochain, ``Review and classification of recent observers applied in chemical process systems,'' \emph{Computers \& Chemical Engineering}, vol.~76, pp. 27--41, 2015.
 
-\bibitem{curtainbook}
-R.~Curtain and H.~Zwart, \emph{Introduction to infinite-dimensional systems theory: a state-space approach}.\hskip 1em plus 0.5em minus 0.4em\relax Springer Nature, 2020, vol.~71, ch. 3.2: `Riesz-spectral operators', pp. 79--108.
-
 \bibitem{krstic2009book}
 M.~Krstić, \emph{Delay compensation for nonlinear, adaptive, and PDE systems}, ser. Systems \& control.\hskip 1em plus 0.5em minus 0.4em\relax Birkhäuser, 2009, ch. 1.8: `DDE or Transport PDE Representation', p.~9.
 
@@ -94,5 +91,8 @@ P.~V. Danckwerts, ``Continuous flow systems. distribution of residence times,'' 
 
 \bibitem{hairer2006geometric}
 E.~Hairer, M.~Hochbruck, A.~Iserles, and C.~Lubich, ``Geometric numerical integration,'' \emph{Oberwolfach Reports}, vol.~3, no.~1, pp. 805--882, 2006.
+
+\bibitem{curtainbook}
+R.~Curtain and H.~Zwart, \emph{Introduction to infinite-dimensional systems theory: a state-space approach}.\hskip 1em plus 0.5em minus 0.4em\relax Springer Nature, 2020, vol.~71, ch. 3.2: `Riesz-spectral operators', pp. 79--108.
 
 \end{thebibliography}
