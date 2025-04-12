@@ -25,7 +25,7 @@ The goal is to design the observer gain $\mathfrak{L}_c$ such that the error dyn
 \end{figure}
 
 \subsection{Discrete-Time Observer Design}
-Once an appropriate continuous-time observer gain is determined, the discrete-time observer gain $\mathfrak{L}_d$ may be obtained using the same Caley-Tustin time discretization approach, as shown in \eqref{eq:observer_discrete}.
+Once an appropriate continuous-time observer gain is determined, the discrete-time observer gain $\mathfrak{L}_d$ may be obtained using the same Cayley-Tustin time discretization approach, as shown in \eqref{eq:observer_discrete}.
 \begin{equation} \label{eq:observer_discrete}
     \begin{aligned}
         \underline{\hat{x}}(\zeta, k) &= \mathfrak{A}_d \underline{\hat{x}}(\zeta, k-1) + \mathfrak{B}_d u(k) + \mathfrak{L}_d [y(k) - \hat{y}(k)] \\
