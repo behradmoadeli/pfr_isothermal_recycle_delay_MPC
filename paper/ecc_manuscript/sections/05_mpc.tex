@@ -38,7 +38,7 @@ where $\mathfrak{Q}$ and $\mathfrak{F}$ are positive definite operators of appro
         & \langle \underline{\hat{x}}(\zeta, k+N | k), \underline{\phi_u}(\zeta) \rangle = 0
     \end{aligned}
 \end{equation}
-Here, $\mathfrak{P}$ is the terminal cost operator obtained as the solution to the discrete-time Lyapunov equation, as shown in \eqref{eq:terminal_cost}. This operator can be shown to be positive definite only if the terminal state $\underline{\hat{x}}(\zeta, k+N | k)$ is in a stable subspace. Therefore, for the resulting quadratic optimization problem to be convex, an equality constraint is introduced to guarantee $\mathfrak{P}$ is positive definite. The terminal constraint is enforced by setting the projection of the terminal state onto the unstable subspace of the system to zero \cite{curtainbook, xu2017linear, khatibi2021model}.
+where $\mathfrak{P}$ is the terminal cost operator obtained as the solution to the discrete-time Lyapunov equation, as shown in \eqref{eq:terminal_cost}. This operator can be shown to be positive definite only if the terminal state $\underline{\hat{x}}(\zeta, k+N | k)$ is in a stable subspace. Therefore, for the resulting quadratic optimization problem to be convex, an equality constraint is introduced to guarantee $\mathfrak{P}$ is positive definite. The terminal constraint is enforced by setting the projection of the terminal state onto the unstable subspace of the system to zero \cite{curtainbook, xu2017linear, khatibi2021model}.
 \begin{equation} \label{eq:terminal_cost}
     \mathfrak{P} (\cdot) = \sum_{m=0}^{\infty} \sum_{n=0}^{\infty} 
     -\frac{
@@ -48,4 +48,10 @@ Here, $\mathfrak{P}$ is the terminal cost operator obtained as the solution to t
     }
     \langle (\cdot) , \underline{\psi_n} \rangle \phi_m
 \end{equation}
-Here, $\underline{\phi_u}(\zeta)$ is the set of unstable eigenfunctions of the system, for all eigenvalues where $\operatorname{Re}(\lambda_u) \geq 0$. In addition, $\underline{\phi_i}$ and $\underline{\psi_i}$ correspond to the $i^{th}$ eigenfunction of the original and adjoint system, respectively. This problem can be further manipulated into a standard format for quadratic programming (QP) solvers. Refer to Appendix \ref{app:QP} for derivation details and results.
+
+Here, $\underline{\phi_u}(\zeta)$ denotes the set of unstable eigenfunctions of the system, corresponding to all eigenvalues with $\operatorname{Re}(\lambda_u) \geq 0$. In addition, $\underline{\phi_i}$ and $\underline{\psi_i}$ represent the $i^{\text{th}}$ eigenfunctions of the original and adjoint systems, respectively. The resulting finite-horizon control problem can be algebraically manipulated into a format compatible with conventional quadratic programming (QP) solvers, where the input sequence over the prediction horizon $N$ is defined as
+\[
+U = \begin{bmatrix} u(k+1|k) & u(k+2|k) & \dots & u(k+N|k) \end{bmatrix}^\top.
+\]
+
+At each sampling instant $k$, the optimal input sequence $U$ is obtained by solving the QP. However, only the first control input, $u(k+1|k)$, is applied to the system in accordance with the receding horizon strategy. Upon receiving the next output measurement $y(k+1)$, the Luenberger observer reconstructs the current system state at time $k+1$, which then initializes the next optimization cycle. This loop repeats at every time step, enabling real-time output feedback control while reconstructing system states. See Appendix~\ref{app:QP} for mathematical details of the QP formulation.

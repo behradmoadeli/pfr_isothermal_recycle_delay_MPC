@@ -83,11 +83,11 @@ Q.~Xu and S.~Dubljevic, ``Linear model predictive control for transport-reaction
 \bibitem{levenspiel1998chemical}
 O.~Levenspiel, \emph{Chemical reaction engineering}.\hskip 1em plus 0.5em minus 0.4em\relax John wiley \& sons, 1998.
 
-\bibitem{jensen1982bifurcation}
-K.~F. Jensen and W.~H. Ray, ``The bifurcation behavior of tubular reactors,'' \emph{Chemical Engineering Science}, vol.~37, no.~2, pp. 199--222, 1982.
-
 \bibitem{danckwerts1993continuous}
 P.~V. Danckwerts, ``Continuous flow systems. distribution of residence times,'' \emph{Chemical engineering science}, vol.~50, no.~24, pp. 3857--3866, 1993.
+
+\bibitem{moadeli2025optimal}
+B.~Moadeli, G.~O. Cassol, and S.~Dubljevic, ``Optimal control of axial dispersion tubular reactors with recycle: Addressing state-delay through transport pdes,'' \emph{The Canadian Journal of Chemical Engineering}, 2025.
 
 \bibitem{hairer2006geometric}
 E.~Hairer, M.~Hochbruck, A.~Iserles, and C.~Lubich, ``Geometric numerical integration,'' \emph{Oberwolfach Reports}, vol.~3, no.~1, pp. 805--882, 2006.
